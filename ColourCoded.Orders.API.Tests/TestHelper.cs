@@ -16,7 +16,7 @@ namespace ColourCoded.Orders.API.Tests
       return new OrdersContext(optionsBuilder.Options);
     }
 
-    public static OrderHead CreateOrderHead(OrdersContext context, string orderNo = "TEST13993", string salesPerson = "testuser", decimal salesTotal = 1110.0M, decimal salesVat = 110.0M, int salesDateAddMonths = 0)
+    public static OrderHead CreateOrderHead(OrdersContext context, string orderNo = "TEST13993", string salesPerson = "testuser", decimal salesTotal = 1110.0M, decimal salesVat = 110.0M, int salesDateAddMonths = 0, int companyProfileId = 0)
     {
       var order = new OrderHead
       {
@@ -26,7 +26,8 @@ namespace ColourCoded.Orders.API.Tests
         OrderTotal = salesTotal,
         VatTotal = salesVat,
         SubTotal = salesTotal - salesVat,
-        DiscountTotal = 0.0M
+        DiscountTotal = 0.0M,
+        CompanyProfileId = companyProfileId
       };
 
       context.Orders.Add(order);
@@ -78,6 +79,12 @@ namespace ColourCoded.Orders.API.Tests
       context.Database.ExecuteSqlCommand("truncate table TaxRates");
     }
 
+    public static void RemoveOrderHeads(OrdersContext context)
+    {
+      context.Database.ExecuteSqlCommand("truncate table OrderHeads");
+    }
+
+
     public static TaxRate CreateTaxRate(OrdersContext context, decimal rate = 0.10M, string taxCode = "TESTTAX")
     {
       var taxRate = new TaxRate
@@ -94,6 +101,28 @@ namespace ColourCoded.Orders.API.Tests
       context.SaveChanges();
 
       return taxRate;
+    }
+
+    public static CompanyProfile CreateCompany(OrdersContext context, int orderNoSeed = 1)
+    {
+      var company = new CompanyProfile
+      {
+        CreateDate = DateTime.Now,
+        CreateUser = "sa",
+        DisplayName = "Test Company",
+        EmailAddress = "someemail@gmail.com",
+        FaxNo = "0219999999",
+        LegalName = "Test PTY LTD",
+        OrderNoSeed = orderNoSeed,
+        RegistrationNo = "TestReg34324",
+        TaxReferenceNo = "VAT3e982/01",
+        TelephoneNo = "0212923345"
+      };
+
+      context.CompanyProfiles.Add(company);
+      context.SaveChanges();
+
+      return company;
     }
   }
 }

@@ -4,5 +4,6 @@
   {
     public string OrderNo { get; set; }
     public string Username { get; set; }
+    public int CompanyProfileId { get; set; }
   }
 }

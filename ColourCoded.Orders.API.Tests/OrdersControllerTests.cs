@@ -39,7 +39,7 @@ namespace ColourCoded.Orders.API.Tests
     }
 
     [TestMethod]
-    public void GetUserOrders_HomeOrdersModelList()
+    public void GetHomeOrders_NoCompany()
     {
       var resources = new Resources();
 
@@ -48,15 +48,120 @@ namespace ColourCoded.Orders.API.Tests
         // Given
         const string username = "testuser";
 
-        var customer = TestHelper.CreateCustomer(resources.Context, 1);
         var orderOne = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST001", salesPerson: username, salesDateAddMonths: -1);
         var orderTwo = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST002", salesPerson: username, salesDateAddMonths: -2);
-        var orderThree = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST003", salesPerson: username, salesDateAddMonths: -3);
+        var orderThree = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST003", salesPerson: "differentUser", salesDateAddMonths: -3);
 
-        var requestModel = new FindUserOrdersRequestModel { Username = username };
+        var requestModel = new GetHomeOrdersRequestModel { Username = username, CompanyProfileId = 0 };
 
         // When
-        var result = resources.Controller.GetUserOrders(requestModel);
+        var result = resources.Controller.GetHomeOrders(requestModel);
+
+        // Then
+        Assert.IsNotNull(result);
+        Assert.AreEqual(2, result.Count);
+
+        Assert.AreEqual(orderOne.OrderNo, result[0].OrderNo);
+        Assert.AreEqual(orderOne.OrderId, result[0].OrderId);
+        Assert.AreEqual(orderOne.OrderTotal.ToString("R 0 000.00"), result[0].Total);
+
+        Assert.AreEqual(orderTwo.OrderNo, result[1].OrderNo);
+        Assert.AreEqual(orderTwo.OrderId, result[1].OrderId);
+        Assert.AreEqual(orderTwo.OrderTotal.ToString("R 0 000.00"), result[1].Total);
+      }
+    }
+
+    [TestMethod]
+    public void GetHomeOrders_HasCompanyProfile()
+    {
+      var resources = new Resources();
+
+      using (resources.Context.Database.BeginTransaction())
+      {
+        // Given
+        const string username = "testuser";
+
+        TestHelper.RemoveOrderHeads(resources.Context);
+        var company = TestHelper.CreateCompany(resources.Context);
+        var orderOne = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST001", salesPerson: username, salesDateAddMonths: -1);
+        var orderTwo = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST002", salesPerson: "differentUser", salesDateAddMonths: -2, companyProfileId: company.CompanyProfileId);
+        var orderThree = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST003", salesPerson: "anotherUser", salesDateAddMonths: -3);
+
+        var requestModel = new GetHomeOrdersRequestModel { Username = username, CompanyProfileId = company.CompanyProfileId };
+
+        // When
+        var result = resources.Controller.GetHomeOrders(requestModel);
+
+        // Then
+        Assert.IsNotNull(result);
+        Assert.AreEqual(2, result.Count);
+
+        Assert.AreEqual(orderOne.OrderNo, result[0].OrderNo);
+        Assert.AreEqual(orderOne.OrderId, result[0].OrderId);
+        Assert.AreEqual(orderOne.OrderTotal.ToString("R 0 000.00"), result[0].Total);
+
+        Assert.AreEqual(orderTwo.OrderNo, result[1].OrderNo);
+        Assert.AreEqual(orderTwo.OrderId, result[1].OrderId);
+        Assert.AreEqual(orderTwo.OrderTotal.ToString("R 0 000.00"), result[1].Total);
+      }
+    }
+
+    [TestMethod]
+    public void GetHomeOrdersByPeriod_NoCompany()
+    {
+      var resources = new Resources();
+
+      using (resources.Context.Database.BeginTransaction())
+      {
+        // Given
+        const string username = "testuser";
+
+        TestHelper.RemoveOrderHeads(resources.Context);
+        var orderOne = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST001", salesPerson: username, salesDateAddMonths: -1);
+        var orderTwo = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST002", salesPerson: username, salesDateAddMonths: -15);
+        var orderThree = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST003", salesPerson: "differentUser", salesDateAddMonths: -18);
+        var orderFour = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST004", salesPerson: username, salesDateAddMonths: -30);
+
+        var requestModel = new GetHomeOrdersPeriodRequestModel { Username = username, CompanyProfileId = 0, StartDate = DateTime.Now.AddDays(-20), EndDate = DateTime.Now };
+
+        // When
+        var result = resources.Controller.GetHomeOrdersInPeriod(requestModel);
+
+        // Then
+        Assert.IsNotNull(result);
+        Assert.AreEqual(2, result.Count);
+
+        Assert.AreEqual(orderOne.OrderNo, result[0].OrderNo);
+        Assert.AreEqual(orderOne.OrderId, result[0].OrderId);
+        Assert.AreEqual(orderOne.OrderTotal.ToString("R 0 000.00"), result[0].Total);
+
+        Assert.AreEqual(orderTwo.OrderNo, result[1].OrderNo);
+        Assert.AreEqual(orderTwo.OrderId, result[1].OrderId);
+        Assert.AreEqual(orderTwo.OrderTotal.ToString("R 0 000.00"), result[1].Total);
+      }
+    }
+
+    [TestMethod]
+    public void GetHomeOrdersByPeriod_HasCompany()
+    {
+      var resources = new Resources();
+
+      using (resources.Context.Database.BeginTransaction())
+      {
+        // Given
+        const string username = "testuser";
+
+        TestHelper.RemoveOrderHeads(resources.Context);
+        var company = TestHelper.CreateCompany(resources.Context);
+        var orderOne = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST001", salesPerson: username, salesDateAddMonths: -1);
+        var orderTwo = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST002", salesPerson: username, salesDateAddMonths: -15);
+        var orderThree = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST003", salesPerson: "differentUser", salesDateAddMonths: -18, companyProfileId: company.CompanyProfileId);
+        var orderFour = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST004", salesPerson: username, salesDateAddMonths: -30, companyProfileId: company.CompanyProfileId);
+
+        var requestModel = new GetHomeOrdersPeriodRequestModel { Username = username, CompanyProfileId = company.CompanyProfileId, StartDate = DateTime.Now.AddDays(-20), EndDate = DateTime.Now };
+
+        // When
+        var result = resources.Controller.GetHomeOrdersInPeriod(requestModel);
 
         // Then
         Assert.IsNotNull(result);
@@ -77,40 +182,6 @@ namespace ColourCoded.Orders.API.Tests
     }
 
     [TestMethod]
-    public void GetUserOrdersByPeriod_HomeOrdersModelList()
-    {
-      var resources = new Resources();
-
-      using (resources.Context.Database.BeginTransaction())
-      {
-        // Given
-        const string username = "testuser";
-
-        var customer = TestHelper.CreateCustomer(resources.Context, 1);
-        var orderOne = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST001", salesPerson: username, salesDateAddMonths: -1);
-        var orderTwo = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST002", salesPerson: username, salesDateAddMonths: -15);
-        var orderThree = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST003", salesPerson: username, salesDateAddMonths: -30);
-
-        var requestModel = new FindUserOrdersPeriodRequestModel { Username = username, StartDate = DateTime.Now.AddDays(-20), EndDate = DateTime.Now };
-
-        // When
-        var result = resources.Controller.GetUserOrdersInPeriod(requestModel);
-
-        // Then
-        Assert.IsNotNull(result);
-        Assert.AreEqual(2, result.Count);
-
-        Assert.AreEqual(orderOne.OrderNo, result[0].OrderNo);
-        Assert.AreEqual(orderOne.OrderId, result[0].OrderId);
-        Assert.AreEqual(orderOne.OrderTotal.ToString("R 0 000.00"), result[0].Total);
-
-        Assert.AreEqual(orderTwo.OrderNo, result[1].OrderNo);
-        Assert.AreEqual(orderTwo.OrderId, result[1].OrderId);
-        Assert.AreEqual(orderTwo.OrderTotal.ToString("R 0 000.00"), result[1].Total);
-      }
-    }
-
-    [TestMethod]
     public void AddOrderHead_Success_ReturnsInt()
     {
       var resources = new Resources();
@@ -119,28 +190,34 @@ namespace ColourCoded.Orders.API.Tests
       {
         // given
         const string orderNo = "TEST123";
-        var requestModel = new AddOrderRequestModel { OrderNo = orderNo, Username = resources.TestUsername};
+        var company = TestHelper.CreateCompany(resources.Context);
+        var requestModel = new AddOrderRequestModel { OrderNo = orderNo, Username = resources.TestUsername, CompanyProfileId = company.CompanyProfileId};
+        var oldSeed = company.OrderNoSeed;
 
         // when
         var result = resources.Controller.AddOrder(requestModel);
 
         // then
         Assert.IsNotNull(result);
+
         var savedOrderHead = resources.Context.Orders.First(o => o.OrderNo == orderNo);
         Assert.AreEqual(requestModel.Username, savedOrderHead.CreateUser);
         Assert.AreEqual(0, savedOrderHead.SubTotal);
         Assert.AreEqual(0, savedOrderHead.VatTotal);
         Assert.AreEqual(0, savedOrderHead.DiscountTotal);
         Assert.AreEqual(0, savedOrderHead.OrderTotal);
+        Assert.AreEqual(company.CompanyProfileId, savedOrderHead.CompanyProfileId);
         Assert.IsNull(savedOrderHead.UpdateDate);
         Assert.IsNull(savedOrderHead.UpdateUser);
         Assert.IsNotNull(savedOrderHead.OrderId);
         Assert.IsNotNull(savedOrderHead.CreateDate);
+
+        Assert.AreEqual(oldSeed + 1, company.OrderNoSeed);
       }
     }
 
     [TestMethod]
-    public void AddOrderHea_AlreadyExists_ReturnsInt()
+    public void AddOrderHead_AlreadyExists_ReturnsInt()
     {
       var resources = new Resources();
 
@@ -493,7 +570,6 @@ namespace ColourCoded.Orders.API.Tests
       }
     }
 
-
     [TestMethod]
     public void GetVatRate_ReturnsDecimal()
     {
@@ -515,5 +591,47 @@ namespace ColourCoded.Orders.API.Tests
       }
     }
 
+    [TestMethod]
+    public void GetOrderNoSeed_NoCompany()
+    {
+      var resources = new Resources();
+
+      using (resources.Context.Database.BeginTransaction())
+      {
+        // given
+        const int orderNoSeed = 122;
+        var company = TestHelper.CreateCompany(resources.Context, orderNoSeed);
+        var requestModel = new GetCompanyOrderNoSeedRequestModel { CompanyProfileId = 0 };
+
+        // when
+        var result = resources.Controller.GetOrderNoSeed(requestModel);
+
+        // then
+        Assert.IsNotNull(result);
+        Assert.AreEqual(1, result);
+      }
+    }
+
+
+    [TestMethod]
+    public void GetOrderNoSeed_HasCompany()
+    {
+      var resources = new Resources();
+
+      using (resources.Context.Database.BeginTransaction())
+      {
+        // given
+        const int orderNoSeed = 122;
+        var company = TestHelper.CreateCompany(resources.Context, orderNoSeed);
+        var requestModel = new GetCompanyOrderNoSeedRequestModel { CompanyProfileId = company.CompanyProfileId };
+
+        // when
+        var result = resources.Controller.GetOrderNoSeed(requestModel);
+
+        // then
+        Assert.IsNotNull(result);
+        Assert.AreEqual(orderNoSeed, result);
+      }
+    }
   }
 }

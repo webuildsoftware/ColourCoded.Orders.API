@@ -29,13 +29,22 @@ namespace ColourCoded.Orders.API.Controllers
       return vatTax.Rate;
     }
 
-    [HttpPost, Route("user")]
-    public List<HomeOrdersModel> GetUserOrders([FromBody]FindUserOrdersRequestModel requestModel)
+    [HttpPost, Route("getseed")]
+    public int GetOrderNoSeed([FromBody]GetCompanyOrderNoSeedRequestModel requestModel)
     {
-      var noOrders = new List<HomeOrdersModel>();
+      if(requestModel.CompanyProfileId != 0)
+        return Context.CompanyProfiles.First(cp => cp.CompanyProfileId == requestModel.CompanyProfileId).OrderNoSeed;
+
+      return 1; // default seed value
+    }
+
+    [HttpPost, Route("home")]
+    public List<HomeOrdersModel> GetHomeOrders([FromBody]GetHomeOrdersRequestModel requestModel)
+    {
+      var orders = new List<HomeOrdersModel>();
 
       var userOrders = Context.Orders.Where(o => o.CreateUser == requestModel.Username).OrderByDescending(o => o.CreateDate)
-        .Take(100).Select(o => new HomeOrdersModel
+        .Take(50).Select(o => new HomeOrdersModel
         {
           OrderId = o.OrderId,
           OrderNo = o.OrderNo,
@@ -43,13 +52,29 @@ namespace ColourCoded.Orders.API.Controllers
           Total = o.OrderTotal.ToString("R # ###.#0")
         }).ToList();
 
-      return userOrders ?? noOrders;
+      if (userOrders != null) orders.AddRange(userOrders);
+
+      if (requestModel.CompanyProfileId != 0)
+      {
+        var companyOrders = Context.Orders.Where(o => o.CreateUser != requestModel.Username && o.CompanyProfileId == requestModel.CompanyProfileId).OrderByDescending(o => o.CreateDate)
+          .Take(50).Select(o => new HomeOrdersModel
+          {
+            OrderId = o.OrderId,
+            OrderNo = o.OrderNo,
+            CreateDate = o.CreateDate.ToShortDateString(),
+            Total = o.OrderTotal.ToString("R # ###.#0")
+          }).ToList();
+
+        if (companyOrders != null) orders.AddRange(companyOrders);
+      }
+
+      return orders;
     }
 
-    [HttpPost, Route("userperiod")]
-    public List<HomeOrdersModel> GetUserOrdersInPeriod([FromBody]FindUserOrdersPeriodRequestModel requestModel)
+    [HttpPost, Route("homeperiod")]
+    public List<HomeOrdersModel> GetHomeOrdersInPeriod([FromBody]GetHomeOrdersPeriodRequestModel requestModel)
     {
-      var noOrders = new List<HomeOrdersModel>();
+      var orders = new List<HomeOrdersModel>();
 
       var userOrders = Context.Orders.Where(o => o.CreateUser == requestModel.Username && o.CreateDate.Date >= requestModel.StartDate && o.CreateDate.Date <= requestModel.EndDate)
         .Select(o => new HomeOrdersModel
@@ -57,16 +82,33 @@ namespace ColourCoded.Orders.API.Controllers
           OrderId = o.OrderId,
           OrderNo = o.OrderNo,
           CreateDate = o.CreateDate.ToShortDateString(),
-          Total = o.OrderTotal.ToString("R 0 000.00")
+          Total = o.OrderTotal.ToString("R # ###.#0")
         }).ToList();
 
-      return userOrders ?? noOrders;
+      if (userOrders != null) orders.AddRange(userOrders);
+
+      if (requestModel.CompanyProfileId != 0)
+      {
+        var companyOrders = Context.Orders.Where(o => o.CreateUser != requestModel.Username && o.CompanyProfileId == requestModel.CompanyProfileId && o.CreateDate.Date >= requestModel.StartDate && o.CreateDate.Date <= requestModel.EndDate).OrderByDescending(o => o.CreateDate)
+          .Take(50).Select(o => new HomeOrdersModel
+          {
+            OrderId = o.OrderId,
+            OrderNo = o.OrderNo,
+            CreateDate = o.CreateDate.ToShortDateString(),
+            Total = o.OrderTotal.ToString("R # ###.#0")
+          }).ToList();
+
+        if (companyOrders != null) orders.AddRange(companyOrders);
+      }
+
+      return orders;
     }
 
     [HttpPost, Route("add")]
     public int AddOrder([FromBody]AddOrderRequestModel requestModel)
     {
       var existingOrder = Context.Orders.FirstOrDefault(o => o.OrderNo == requestModel.OrderNo);
+      var vatTax = Context.TaxRates.First(r => r.TaxCode == OrdersConstants.VatTaxCode && r.StartDate.Date <= DateTime.Now.Date && r.EndDate.Date >= DateTime.Now.Date);
 
       if (existingOrder != null)
         return existingOrder.OrderId;
@@ -78,12 +120,17 @@ namespace ColourCoded.Orders.API.Controllers
         VatTotal = 0M,
         DiscountTotal = 0M,
         OrderTotal = 0M,
-        VatRate = 0.15M, // to get from the context
+        VatRate = vatTax.Rate,
+        CompanyProfileId = requestModel.CompanyProfileId,
         CreateDate = DateTime.Now,
         CreateUser = requestModel.Username
       };
 
       Context.Orders.Add(newOrder);
+
+      if(requestModel.CompanyProfileId != 0)
+        Context.CompanyProfiles.First(cp => cp.CompanyProfileId == requestModel.CompanyProfileId).OrderNoSeed += 1;
+
       Context.SaveChanges();
 
       return newOrder.OrderId; 

@@ -16,3 +16,21 @@ C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.API.Tests\obj\Debug\netcore
 C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.API.Tests\obj\Debug\netcoreapp2.1\ColourCoded.Orders.API.Tests.csproj.CopyComplete
 C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.API.Tests\obj\Debug\netcoreapp2.1\ColourCoded.Orders.API.Tests.dll
 C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.API.Tests\obj\Debug\netcoreapp2.1\ColourCoded.Orders.API.Tests.pdb
+C:\SourceControl\Orders.API\ColourCoded.Orders.API.Tests\bin\Debug\netcoreapp2.1\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+C:\SourceControl\Orders.API\ColourCoded.Orders.API.Tests\bin\Debug\netcoreapp2.1\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+C:\SourceControl\Orders.API\ColourCoded.Orders.API.Tests\bin\Debug\netcoreapp2.1\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+C:\SourceControl\Orders.API\ColourCoded.Orders.API.Tests\bin\Debug\netcoreapp2.1\appsettings.json
+C:\SourceControl\Orders.API\ColourCoded.Orders.API.Tests\bin\Debug\netcoreapp2.1\ColourCoded.Orders.API.Tests.deps.json
+C:\SourceControl\Orders.API\ColourCoded.Orders.API.Tests\bin\Debug\netcoreapp2.1\ColourCoded.Orders.API.Tests.runtimeconfig.json
+C:\SourceControl\Orders.API\ColourCoded.Orders.API.Tests\bin\Debug\netcoreapp2.1\ColourCoded.Orders.API.Tests.runtimeconfig.dev.json
+C:\SourceControl\Orders.API\ColourCoded.Orders.API.Tests\bin\Debug\netcoreapp2.1\ColourCoded.Orders.API.Tests.dll
+C:\SourceControl\Orders.API\ColourCoded.Orders.API.Tests\bin\Debug\netcoreapp2.1\ColourCoded.Orders.API.Tests.pdb
+C:\SourceControl\Orders.API\ColourCoded.Orders.API.Tests\bin\Debug\netcoreapp2.1\ColourCoded.Orders.API.dll
+C:\SourceControl\Orders.API\ColourCoded.Orders.API.Tests\bin\Debug\netcoreapp2.1\ColourCoded.Orders.API.pdb
+C:\SourceControl\Orders.API\ColourCoded.Orders.API.Tests\obj\Debug\netcoreapp2.1\ColourCoded.Orders.API.Tests.csprojAssemblyReference.cache
+C:\SourceControl\Orders.API\ColourCoded.Orders.API.Tests\obj\Debug\netcoreapp2.1\ColourCoded.Orders.API.Tests.csproj.CoreCompileInputs.cache
+C:\SourceControl\Orders.API\ColourCoded.Orders.API.Tests\obj\Debug\netcoreapp2.1\ColourCoded.Orders.API.Tests.AssemblyInfoInputs.cache
+C:\SourceControl\Orders.API\ColourCoded.Orders.API.Tests\obj\Debug\netcoreapp2.1\ColourCoded.Orders.API.Tests.AssemblyInfo.cs
+C:\SourceControl\Orders.API\ColourCoded.Orders.API.Tests\obj\Debug\netcoreapp2.1\ColourCoded.Orders.API.Tests.csproj.CopyComplete
+C:\SourceControl\Orders.API\ColourCoded.Orders.API.Tests\obj\Debug\netcoreapp2.1\ColourCoded.Orders.API.Tests.dll
+C:\SourceControl\Orders.API\ColourCoded.Orders.API.Tests\obj\Debug\netcoreapp2.1\ColourCoded.Orders.API.Tests.pdb

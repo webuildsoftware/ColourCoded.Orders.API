@@ -8,3 +8,9 @@ C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.OLTP\obj\Debug\postdeploy.s
 C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.OLTP\obj\Debug\predeploy.sql
 C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.OLTP\obj\Debug\ColourCoded.Orders.OLTP.dll
 C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.OLTP\obj\Debug\ColourCoded.Orders.OLTP.pdb
+C:\SourceControl\Orders.API\ColourCoded.Orders.OLTP\bin\Debug\ColourCoded.Orders.OLTP.dacpac
+C:\SourceControl\Orders.API\ColourCoded.Orders.OLTP\bin\Debug\ColourCoded.Orders.OLTP.dll
+C:\SourceControl\Orders.API\ColourCoded.Orders.OLTP\bin\Debug\ColourCoded.Orders.OLTP.pdb
+C:\SourceControl\Orders.API\ColourCoded.Orders.OLTP\obj\Debug\ColourCoded.Orders.OLTP.sqlprojAssemblyReference.cache
+C:\SourceControl\Orders.API\ColourCoded.Orders.OLTP\obj\Debug\ColourCoded.Orders.OLTP.dll
+C:\SourceControl\Orders.API\ColourCoded.Orders.OLTP\obj\Debug\ColourCoded.Orders.OLTP.pdb

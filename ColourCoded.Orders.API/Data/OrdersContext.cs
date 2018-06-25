@@ -8,6 +8,7 @@ namespace ColourCoded.Orders.API.Data
     public DbSet<OrderHead> Orders { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<TaxRate> TaxRates { get; set; }
+    public DbSet<CompanyProfile> CompanyProfiles { get; set; }
 
     public OrdersContext(DbContextOptions<OrdersContext> options) : base(options)
     {
@@ -20,6 +21,7 @@ namespace ColourCoded.Orders.API.Data
       modelBuilder.ApplyConfiguration(new OrderDetailMapping());
       modelBuilder.ApplyConfiguration(new CustomerMapping());
       modelBuilder.ApplyConfiguration(new TaxRateMapping());
+      modelBuilder.ApplyConfiguration(new CompanyProfileMapping());
     }
   }
 }

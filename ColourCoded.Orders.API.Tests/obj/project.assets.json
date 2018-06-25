@@ -14168,11 +14168,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\zunai\\Desktop\\New Source\\ColourCoded.Orders.API.Tests\\ColourCoded.Orders.API.Tests.csproj",
+      "projectUniqueName": "C:\\SourceControl\\Orders.API\\ColourCoded.Orders.API.Tests\\ColourCoded.Orders.API.Tests.csproj",
       "projectName": "ColourCoded.Orders.API.Tests",
-      "projectPath": "C:\\Users\\zunai\\Desktop\\New Source\\ColourCoded.Orders.API.Tests\\ColourCoded.Orders.API.Tests.csproj",
+      "projectPath": "C:\\SourceControl\\Orders.API\\ColourCoded.Orders.API.Tests\\ColourCoded.Orders.API.Tests.csproj",
       "packagesPath": "C:\\Users\\zunai\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\zunai\\Desktop\\New Source\\ColourCoded.Orders.API.Tests\\obj\\",
+      "outputPath": "C:\\SourceControl\\Orders.API\\ColourCoded.Orders.API.Tests\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -14191,8 +14191,8 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "C:\\Users\\zunai\\Desktop\\New Source\\ColourCoded.Orders.API\\ColourCoded.Orders.API.csproj": {
-              "projectPath": "C:\\Users\\zunai\\Desktop\\New Source\\ColourCoded.Orders.API\\ColourCoded.Orders.API.csproj"
+            "C:\\SourceControl\\Orders.API\\ColourCoded.Orders.API\\ColourCoded.Orders.API.csproj": {
+              "projectPath": "C:\\SourceControl\\Orders.API\\ColourCoded.Orders.API\\ColourCoded.Orders.API.csproj"
             }
           }
         }

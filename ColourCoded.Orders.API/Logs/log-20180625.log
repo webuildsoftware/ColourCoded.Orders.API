@@ -71,3 +71,125 @@
    at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
    at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeInnerFilterAsync>d__14.MoveNext()
    at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()
+2018-06-25 22:17:31.161 +02:00 [Information] Starting web host
+2018-06-25 22:17:34.412 +02:00 [Warning] Using an in-memory repository. Keys will not be persisted to storage.
+2018-06-25 22:17:34.416 +02:00 [Warning] Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+2018-06-25 22:17:34.623 +02:00 [Warning] No XML encryptor configured. Key {3574922d-5e97-4ee9-892c-ac249dae3190} may be persisted to storage in unencrypted form.
+2018-06-25 22:22:16.398 +02:00 [Error] Request matched multiple actions resulting in ambiguity. Matching actions: "ColourCoded.Orders.API.Controllers.OrdersController.GetVatRate (ColourCoded.Orders.API)
+ColourCoded.Orders.API.Controllers.OrdersController.GetOrderNoSeed (ColourCoded.Orders.API)"
+2018-06-25 22:22:16.638 +02:00 [Error] An unhandled exception has occurred while executing the request
+Microsoft.AspNetCore.Mvc.Internal.AmbiguousActionException: Multiple actions matched. The following actions matched route data and had all constraints satisfied:
+
+ColourCoded.Orders.API.Controllers.OrdersController.GetVatRate (ColourCoded.Orders.API)
+ColourCoded.Orders.API.Controllers.OrdersController.GetOrderNoSeed (ColourCoded.Orders.API)
+   at Microsoft.AspNetCore.Mvc.Internal.ActionSelector.SelectBestCandidate(RouteContext context, IReadOnlyList`1 candidates)
+   at Microsoft.AspNetCore.Mvc.Internal.MvcAttributeRouteHandler.RouteAsync(RouteContext context)
+   at Microsoft.AspNetCore.Routing.Tree.TreeRouter.<RouteAsync>d__13.MoveNext()
+   at Microsoft.AspNetCore.Routing.RouteCollection.<RouteAsync>d__9.MoveNext()
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.<Invoke>d__4.MoveNext()
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.<Invoke>d__7.MoveNext()
+2018-06-25 22:23:27.256 +02:00 [Information] Starting web host
+2018-06-25 22:23:27.651 +02:00 [Warning] Using an in-memory repository. Keys will not be persisted to storage.
+2018-06-25 22:23:27.655 +02:00 [Warning] Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+2018-06-25 22:23:27.725 +02:00 [Warning] No XML encryptor configured. Key {8d2681b3-0e8c-4da0-bded-d84af9c05170} may be persisted to storage in unencrypted form.
+2018-06-25 22:23:38.843 +02:00 [Error] An exception was thrown while attempting to evaluate a LINQ query parameter expression. To show additional information call EnableSensitiveDataLogging() when overriding DbContext.OnConfiguring.
+2018-06-25 22:23:38.888 +02:00 [Error] An exception occurred in the database while iterating the results of a query for context type '"ColourCoded.Orders.API.Data.OrdersContext"'."
+""System.InvalidOperationException: Sequence contains no elements
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at lambda_method(Closure , QueryContext )
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass17_1`1.<CompileQueryCore>b__0(QueryContext qc)"
+System.InvalidOperationException: Sequence contains no elements
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at lambda_method(Closure , QueryContext )
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass17_1`1.<CompileQueryCore>b__0(QueryContext qc)
+2018-06-25 22:23:38.889 +02:00 [Error] Sequence contains no elements
+2018-06-25 22:23:38.898 +02:00 [Error]    at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at lambda_method(Closure , QueryContext )
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass17_1`1.<CompileQueryCore>b__0(QueryContext qc)
+   at System.Linq.Queryable.First[TSource](IQueryable`1 source, Expression`1 predicate)
+   at ColourCoded.Orders.API.Controllers.OrdersController.GetVatRate() in C:\SourceControl\Orders.API\ColourCoded.Orders.API\Controllers\OrdersController.cs:line 27
+   at lambda_method(Closure , Object , Object[] )
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeActionMethodAsync>d__12.MoveNext()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeNextActionFilterAsync>d__10.MoveNext()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeInnerFilterAsync>d__14.MoveNext()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()
+2018-06-25 22:23:38.899 +02:00 [Error]    at Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal.ParameterExtractingExpressionVisitor.Evaluate(Expression expression, String& parameterName)
+   at Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal.ParameterExtractingExpressionVisitor.TryExtractParameter(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal.ParameterExtractingExpressionVisitor.VisitMember(MemberExpression memberExpression)
+   at System.Linq.Expressions.MemberExpression.Accept(ExpressionVisitor visitor)
+   at System.Linq.Expressions.ExpressionVisitor.Visit(Expression node)
+   at System.Linq.Expressions.ExpressionVisitor.VisitBinary(BinaryExpression node)
+   at System.Linq.Expressions.BinaryExpression.Accept(ExpressionVisitor visitor)
+   at System.Linq.Expressions.ExpressionVisitor.Visit(Expression node)
+   at System.Linq.Expressions.ExpressionVisitor.VisitLambda[T](Expression`1 node)
+   at Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal.ParameterExtractingExpressionVisitor.VisitLambda[T](Expression`1 node)
+   at System.Linq.Expressions.Expression`1.Accept(ExpressionVisitor visitor)
+   at System.Linq.Expressions.ExpressionVisitor.Visit(Expression node)
+   at System.Linq.Expressions.ExpressionVisitor.VisitUnary(UnaryExpression node)
+   at Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal.ParameterExtractingExpressionVisitor.VisitUnary(UnaryExpression unaryExpression)
+   at System.Linq.Expressions.UnaryExpression.Accept(ExpressionVisitor visitor)
+   at System.Linq.Expressions.ExpressionVisitor.Visit(Expression node)
+   at System.Dynamic.Utils.ExpressionVisitorUtils.VisitArguments(ExpressionVisitor visitor, IArgumentProvider nodes)
+   at System.Linq.Expressions.ExpressionVisitor.VisitMethodCall(MethodCallExpression node)
+   at Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal.ParameterExtractingExpressionVisitor.VisitMethodCall(MethodCallExpression methodCallExpression)
+   at System.Linq.Expressions.MethodCallExpression.Accept(ExpressionVisitor visitor)
+   at System.Linq.Expressions.ExpressionVisitor.Visit(Expression node)
+   at Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal.ParameterExtractingExpressionVisitor.ExtractParameters(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)
+   at System.Linq.Queryable.First[TSource](IQueryable`1 source, Expression`1 predicate)
+   at ColourCoded.Orders.API.Controllers.OrdersController.GetOrderNoSeed(GetCompanyOrderNoSeedRequestModel requestModel) in C:\SourceControl\Orders.API\ColourCoded.Orders.API\Controllers\OrdersController.cs:line 35
+   at lambda_method(Closure , Object , Object[] )
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeActionMethodAsync>d__12.MoveNext()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeNextActionFilterAsync>d__10.MoveNext()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeInnerFilterAsync>d__14.MoveNext()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()
+2018-06-25 22:24:35.944 +02:00 [Information] Starting web host
+2018-06-25 22:24:37.585 +02:00 [Warning] Using an in-memory repository. Keys will not be persisted to storage.
+2018-06-25 22:24:37.587 +02:00 [Warning] Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+2018-06-25 22:24:37.664 +02:00 [Warning] No XML encryptor configured. Key {cf949027-7802-4fea-b570-23ea385d0723} may be persisted to storage in unencrypted form.
+2018-06-25 22:31:41.364 +02:00 [Information] Starting web host
+2018-06-25 22:31:42.385 +02:00 [Warning] Using an in-memory repository. Keys will not be persisted to storage.
+2018-06-25 22:31:42.387 +02:00 [Warning] Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+2018-06-25 22:31:42.461 +02:00 [Warning] No XML encryptor configured. Key {4d210518-982a-44a1-a444-9ec42937626b} may be persisted to storage in unencrypted form.
+2018-06-25 22:43:08.032 +02:00 [Information] Starting web host
+2018-06-25 22:43:08.386 +02:00 [Warning] Using an in-memory repository. Keys will not be persisted to storage.
+2018-06-25 22:43:08.388 +02:00 [Warning] Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+2018-06-25 22:43:08.435 +02:00 [Warning] No XML encryptor configured. Key {4babd24d-42f5-4cbb-aced-8db05df40318} may be persisted to storage in unencrypted form.
+2018-06-25 23:40:23.256 +02:00 [Information] Starting web host
+2018-06-25 23:40:23.611 +02:00 [Warning] Using an in-memory repository. Keys will not be persisted to storage.
+2018-06-25 23:40:23.613 +02:00 [Warning] Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+2018-06-25 23:40:23.660 +02:00 [Warning] No XML encryptor configured. Key {91bd5b1b-f6f3-4825-bd2f-a2e9cd0d5450} may be persisted to storage in unencrypted form.
+2018-06-25 23:40:59.430 +02:00 [Error] An exception occurred in the database while iterating the results of a query for context type '"ColourCoded.Orders.API.Data.OrdersContext"'."
+""System.InvalidOperationException: Sequence contains no elements
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at lambda_method(Closure , QueryContext )
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass17_1`1.<CompileQueryCore>b__0(QueryContext qc)"
+System.InvalidOperationException: Sequence contains no elements
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at lambda_method(Closure , QueryContext )
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass17_1`1.<CompileQueryCore>b__0(QueryContext qc)
+2018-06-25 23:40:59.442 +02:00 [Error] Sequence contains no elements
+2018-06-25 23:40:59.460 +02:00 [Error]    at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at lambda_method(Closure , QueryContext )
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass17_1`1.<CompileQueryCore>b__0(QueryContext qc)
+   at System.Linq.Queryable.First[TSource](IQueryable`1 source, Expression`1 predicate)
+   at ColourCoded.Orders.API.Controllers.OrdersController.GetOrderNoSeed(GetCompanyOrderNoSeedRequestModel requestModel) in C:\SourceControl\Orders.API\ColourCoded.Orders.API\Controllers\OrdersController.cs:line 35
+   at lambda_method(Closure , Object , Object[] )
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeActionMethodAsync>d__12.MoveNext()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeNextActionFilterAsync>d__10.MoveNext()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeInnerFilterAsync>d__14.MoveNext()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()
+2018-06-25 23:48:23.141 +02:00 [Information] Starting web host
+2018-06-25 23:48:23.492 +02:00 [Warning] Using an in-memory repository. Keys will not be persisted to storage.
+2018-06-25 23:48:23.494 +02:00 [Warning] Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+2018-06-25 23:48:23.541 +02:00 [Warning] No XML encryptor configured. Key {bedf691b-f37a-41f0-8367-b3b9fd00d17b} may be persisted to storage in unencrypted form.
+2018-06-25 23:54:36.730 +02:00 [Information] Starting web host
+2018-06-25 23:54:37.143 +02:00 [Warning] Using an in-memory repository. Keys will not be persisted to storage.
+2018-06-25 23:54:37.146 +02:00 [Warning] Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+2018-06-25 23:54:37.195 +02:00 [Warning] No XML encryptor configured. Key {bd68afa9-650c-4764-b763-19a7315423cb} may be persisted to storage in unencrypted form.

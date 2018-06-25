@@ -12985,11 +12985,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\zunai\\Desktop\\New Source\\ColourCoded.Orders.API\\ColourCoded.Orders.API.csproj",
+      "projectUniqueName": "C:\\SourceControl\\Orders.API\\ColourCoded.Orders.API\\ColourCoded.Orders.API.csproj",
       "projectName": "ColourCoded.Orders.API",
-      "projectPath": "C:\\Users\\zunai\\Desktop\\New Source\\ColourCoded.Orders.API\\ColourCoded.Orders.API.csproj",
+      "projectPath": "C:\\SourceControl\\Orders.API\\ColourCoded.Orders.API\\ColourCoded.Orders.API.csproj",
       "packagesPath": "C:\\Users\\zunai\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\zunai\\Desktop\\New Source\\ColourCoded.Orders.API\\obj\\",
+      "outputPath": "C:\\SourceControl\\Orders.API\\ColourCoded.Orders.API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
