@@ -1,0 +1,73 @@
+2018-06-25 00:00:58.281 +02:00 [Information] Starting web host
+2018-06-25 00:00:58.759 +02:00 [Warning] Using an in-memory repository. Keys will not be persisted to storage.
+2018-06-25 00:00:58.764 +02:00 [Warning] Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+2018-06-25 00:00:58.851 +02:00 [Warning] No XML encryptor configured. Key {8b6d95b0-c169-4838-b51b-1124d078785e} may be persisted to storage in unencrypted form.
+2018-06-25 00:01:27.956 +02:00 [Information] Starting web host
+2018-06-25 00:01:28.451 +02:00 [Warning] Using an in-memory repository. Keys will not be persisted to storage.
+2018-06-25 00:01:28.453 +02:00 [Warning] Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+2018-06-25 00:01:28.512 +02:00 [Warning] No XML encryptor configured. Key {161c473f-3f79-4e48-9d34-15f49c4a0295} may be persisted to storage in unencrypted form.
+2018-06-25 00:05:55.570 +02:00 [Information] Starting web host
+2018-06-25 00:05:56.987 +02:00 [Warning] Using an in-memory repository. Keys will not be persisted to storage.
+2018-06-25 00:05:56.991 +02:00 [Warning] Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+2018-06-25 00:05:57.104 +02:00 [Warning] No XML encryptor configured. Key {d1a1dc5c-0b79-4761-aebd-679c5074e4a4} may be persisted to storage in unencrypted form.
+2018-06-25 00:07:52.107 +02:00 [Information] Starting web host
+2018-06-25 00:07:52.562 +02:00 [Warning] Using an in-memory repository. Keys will not be persisted to storage.
+2018-06-25 00:07:52.565 +02:00 [Warning] Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+2018-06-25 00:07:52.648 +02:00 [Warning] No XML encryptor configured. Key {1ea7d6b8-fc95-4483-9adb-c233a838ede4} may be persisted to storage in unencrypted form.
+2018-06-25 00:09:41.428 +02:00 [Information] Starting web host
+2018-06-25 00:09:41.847 +02:00 [Warning] Using an in-memory repository. Keys will not be persisted to storage.
+2018-06-25 00:09:41.850 +02:00 [Warning] Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+2018-06-25 00:09:41.917 +02:00 [Warning] No XML encryptor configured. Key {4a426902-e368-42c0-ba75-33710171249f} may be persisted to storage in unencrypted form.
+2018-06-25 00:10:10.342 +02:00 [Error] asdfasdf
+2018-06-25 00:10:10.400 +02:00 [Error]    at ColourCoded.Orders.API.Controllers.OrdersController.AddOrderDetail(List`1 requestModel) in C:\SourceControl\ColourCoded.Orders.API\ColourCoded.Orders.API\Controllers\OrdersController.cs:line 87
+   at lambda_method(Closure , Object , Object[] )
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeActionMethodAsync>d__12.MoveNext()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeNextActionFilterAsync>d__10.MoveNext()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeInnerFilterAsync>d__14.MoveNext()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()
+2018-06-25 00:10:15.373 +02:00 [Error] asdfasdf
+2018-06-25 00:10:15.377 +02:00 [Error]    at ColourCoded.Orders.API.Controllers.OrdersController.AddOrderDetail(List`1 requestModel) in C:\SourceControl\ColourCoded.Orders.API\ColourCoded.Orders.API\Controllers\OrdersController.cs:line 87
+   at lambda_method(Closure , Object , Object[] )
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeActionMethodAsync>d__12.MoveNext()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeNextActionFilterAsync>d__10.MoveNext()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeInnerFilterAsync>d__14.MoveNext()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()
+2018-06-25 00:11:14.806 +02:00 [Information] Starting web host
+2018-06-25 00:11:15.258 +02:00 [Warning] Using an in-memory repository. Keys will not be persisted to storage.
+2018-06-25 00:11:15.261 +02:00 [Warning] Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+2018-06-25 00:11:15.329 +02:00 [Warning] No XML encryptor configured. Key {79ae426b-5fbe-40f8-bdf6-efddcdb8e1ad} may be persisted to storage in unencrypted form.
+2018-06-25 00:11:31.660 +02:00 [Error] asdfasdf
+2018-06-25 00:11:31.710 +02:00 [Error]    at ColourCoded.Orders.API.Controllers.OrdersController.GetOrderDetail(GetOrderDetailRequestModel requestModel) in C:\SourceControl\ColourCoded.Orders.API\ColourCoded.Orders.API\Controllers\OrdersController.cs:line 190
+   at lambda_method(Closure , Object , Object[] )
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeActionMethodAsync>d__12.MoveNext()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeNextActionFilterAsync>d__10.MoveNext()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeInnerFilterAsync>d__14.MoveNext()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()
+2018-06-25 00:13:39.084 +02:00 [Error] asdfasdf
+2018-06-25 00:13:39.087 +02:00 [Error]    at ColourCoded.Orders.API.Controllers.OrdersController.GetOrderDetail(GetOrderDetailRequestModel requestModel) in C:\SourceControl\ColourCoded.Orders.API\ColourCoded.Orders.API\Controllers\OrdersController.cs:line 190
+   at lambda_method(Closure , Object , Object[] )
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeActionMethodAsync>d__12.MoveNext()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeNextActionFilterAsync>d__10.MoveNext()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeInnerFilterAsync>d__14.MoveNext()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()
+2018-06-25 00:19:08.008 +02:00 [Information] Starting web host
+2018-06-25 00:19:08.508 +02:00 [Warning] Using an in-memory repository. Keys will not be persisted to storage.
+2018-06-25 00:19:08.511 +02:00 [Warning] Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits.
+2018-06-25 00:19:08.586 +02:00 [Warning] No XML encryptor configured. Key {943c9709-25ca-46fb-bd05-d8fed040e929} may be persisted to storage in unencrypted form.
+2018-06-25 00:19:17.409 +02:00 [Error] asdfasdf
+2018-06-25 00:19:17.457 +02:00 [Error]    at ColourCoded.Orders.API.Controllers.OrdersController.GetOrderDetail(GetOrderDetailRequestModel requestModel) in C:\SourceControl\ColourCoded.Orders.API\ColourCoded.Orders.API\Controllers\OrdersController.cs:line 190
+   at lambda_method(Closure , Object , Object[] )
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeActionMethodAsync>d__12.MoveNext()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeNextActionFilterAsync>d__10.MoveNext()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeInnerFilterAsync>d__14.MoveNext()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextExceptionFilterAsync>d__23.MoveNext()

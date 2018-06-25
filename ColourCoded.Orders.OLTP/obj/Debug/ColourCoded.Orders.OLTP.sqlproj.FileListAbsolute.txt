@@ -1,0 +1,10 @@
+C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.OLTP\bin\Debug\ColourCoded.Orders.OLTP.dacpac
+C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.OLTP\bin\Debug\ColourCoded.Orders.OLTP.dll
+C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.OLTP\bin\Debug\ColourCoded.Orders.OLTP.pdb
+C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.OLTP\obj\Debug\ColourCoded.Orders.OLTP.sqlprojAssemblyReference.cache
+C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.OLTP\obj\Debug\Model.xml
+C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.OLTP\obj\Debug\refactor.xml
+C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.OLTP\obj\Debug\postdeploy.sql
+C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.OLTP\obj\Debug\predeploy.sql
+C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.OLTP\obj\Debug\ColourCoded.Orders.OLTP.dll
+C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.OLTP\obj\Debug\ColourCoded.Orders.OLTP.pdb

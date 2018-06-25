@@ -1,0 +1,12 @@
+C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.API\bin\Debug\netcoreapp2.1\appsettings.json
+C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.API\bin\Debug\netcoreapp2.1\ColourCoded.Orders.API.deps.json
+C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.API\bin\Debug\netcoreapp2.1\ColourCoded.Orders.API.runtimeconfig.json
+C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.API\bin\Debug\netcoreapp2.1\ColourCoded.Orders.API.runtimeconfig.dev.json
+C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.API\bin\Debug\netcoreapp2.1\ColourCoded.Orders.API.dll
+C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.API\bin\Debug\netcoreapp2.1\ColourCoded.Orders.API.pdb
+C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.API\obj\Debug\netcoreapp2.1\ColourCoded.Orders.API.csprojAssemblyReference.cache
+C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.API\obj\Debug\netcoreapp2.1\ColourCoded.Orders.API.csproj.CoreCompileInputs.cache
+C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.API\obj\Debug\netcoreapp2.1\ColourCoded.Orders.API.AssemblyInfoInputs.cache
+C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.API\obj\Debug\netcoreapp2.1\ColourCoded.Orders.API.AssemblyInfo.cs
+C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.API\obj\Debug\netcoreapp2.1\ColourCoded.Orders.API.dll
+C:\Users\zunai\Desktop\New Source\ColourCoded.Orders.API\obj\Debug\netcoreapp2.1\ColourCoded.Orders.API.pdb
