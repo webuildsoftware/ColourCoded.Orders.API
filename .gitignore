@@ -12,3 +12,9 @@
 *.dll
 *.pdb
 *.xml
+*.log
+*.txt
+*.ide-shm
+.vs/ColourCoded.Orders.API/DesignTimeBuild/.dtbcache
+.vs/ColourCoded.Orders.API/DesignTimeBuild/.dtbcache
+*.txt
