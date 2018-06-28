@@ -22,3 +22,16 @@
 *.pdb
 *.dll
 *.pdb
+*.dbmdl
+*.ide
+*.ide-shm
+*.ide-wal
+*.jfm
+*.ide
+*.ide-shm
+*.ide-wal
+*.jfm
+.vs/ColourCoded.Orders.API/DesignTimeBuild/.dtbcache
+.vs/ColourCoded.Orders.API/v15/.suo
+*.ide
+*.ide-shm
