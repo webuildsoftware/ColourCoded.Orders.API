@@ -22,6 +22,7 @@ namespace ColourCoded.Orders.API.Data
       modelBuilder.ApplyConfiguration(new CustomerMapping());
       modelBuilder.ApplyConfiguration(new TaxRateMapping());
       modelBuilder.ApplyConfiguration(new CompanyProfileMapping());
+      modelBuilder.ApplyConfiguration(new ContactPersonMapping());
     }
   }
 }

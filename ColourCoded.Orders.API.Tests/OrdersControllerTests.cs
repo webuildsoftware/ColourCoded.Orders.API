@@ -10,6 +10,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using ColourCoded.Orders.API.Models.ResponseModels;
 
 namespace ColourCoded.Orders.API.Tests
 {
@@ -23,10 +24,12 @@ namespace ColourCoded.Orders.API.Tests
       public IConfiguration Configuration;
       public MemoryCache MemoryCache;
       public string TestUsername { get; set; }
+      public int CompanyProfileId { get; set; }
 
       public Resources()
       {
         TestUsername = "testuser";
+        CompanyProfileId = 1;
         Configuration = new ConfigurationBuilder()
                             .AddJsonFile("appsettings.json")
                             .Build();
@@ -612,7 +615,6 @@ namespace ColourCoded.Orders.API.Tests
       }
     }
 
-
     [TestMethod]
     public void GetOrderNoSeed_HasCompany()
     {
@@ -632,6 +634,98 @@ namespace ColourCoded.Orders.API.Tests
         Assert.IsNotNull(result);
         Assert.AreEqual(orderNoSeed, result);
       }
+    }
+
+    [TestMethod]
+    public void GetOrderCustomers_LinkedToCompanyProfile_User_ReturnsCustomerModel()
+    {
+      var resources = new Resources();
+
+      using (resources.Context.Database.BeginTransaction())
+      {
+        // given
+        TestHelper.RemoveCustomers(resources.Context);
+        var customerOne = TestHelper.CreateCustomer(resources.Context, companyProfileId: 0, username: resources.TestUsername);
+        var customerTwo = TestHelper.CreateCustomer(resources.Context, companyProfileId: resources.CompanyProfileId);
+        var customerThree = TestHelper.CreateCustomer(resources.Context, companyProfileId: resources.CompanyProfileId);
+
+        var customerFour = TestHelper.CreateCustomer(resources.Context, companyProfileId: 999);
+        var customerFive = TestHelper.CreateCustomer(resources.Context, username: "otheruser");
+
+        var requestModel = new GetOrderCustomersRequestModel { CompanyProfileId = resources.CompanyProfileId, Username = resources.TestUsername };
+
+        // when
+        var result = resources.Controller.GetOrderCustomers(requestModel) as List<CustomerModel>;
+
+        // then
+        Assert.IsNotNull(result);
+        Assert.AreEqual(3, result.Count);
+
+        Assert.AreEqual(customerOne.CustomerName, result[0].CustomerName);
+        Assert.AreEqual(customerOne.CustomerId, result[0].CustomerId);
+        Assert.AreEqual(customerOne.CustomerDetails, result[0].CustomerDetails);
+        Assert.AreEqual(customerOne.ContactNo, result[0].ContactNo);
+        Assert.AreEqual(customerOne.AccountNo, result[0].AccountNo);
+        Assert.AreEqual(customerOne.CompanyProfileId, result[0].CompanyProfileId);
+        Assert.AreEqual(customerOne.EmailAddress, result[0].EmailAddress);
+
+        Assert.AreEqual(customerTwo.CustomerName, result[1].CustomerName);
+        Assert.AreEqual(customerTwo.CustomerId, result[1].CustomerId);
+        Assert.AreEqual(customerTwo.CustomerDetails, result[1].CustomerDetails);
+        Assert.AreEqual(customerTwo.ContactNo, result[1].ContactNo);
+        Assert.AreEqual(customerTwo.AccountNo, result[1].AccountNo);
+        Assert.AreEqual(customerTwo.CompanyProfileId, result[1].CompanyProfileId);
+        Assert.AreEqual(customerTwo.EmailAddress, result[1].EmailAddress);
+
+        Assert.AreEqual(customerThree.CustomerName, result[2].CustomerName);
+        Assert.AreEqual(customerThree.CustomerId, result[2].CustomerId);
+        Assert.AreEqual(customerThree.CustomerDetails, result[2].CustomerDetails);
+        Assert.AreEqual(customerThree.ContactNo, result[2].ContactNo);
+        Assert.AreEqual(customerThree.AccountNo, result[2].AccountNo);
+        Assert.AreEqual(customerThree.CompanyProfileId, result[2].CompanyProfileId);
+        Assert.AreEqual(customerThree.EmailAddress, result[2].EmailAddress);
+      }
+
+    }
+
+    [TestMethod]
+    public void GetCustomerContacts()
+    {
+      var resources = new Resources();
+
+      using (resources.Context.Database.BeginTransaction())
+      {
+        // given
+        var customerOne = TestHelper.CreateCustomer(resources.Context, companyProfileId: 0, username: resources.TestUsername);
+        var contactOne = TestHelper.CreateContactPerson(resources.Context, customerOne);
+        var contactTwo = TestHelper.CreateContactPerson(resources.Context, customerOne);
+
+        var customerTwo = TestHelper.CreateCustomer(resources.Context, companyProfileId: resources.CompanyProfileId);
+        var contactThree = TestHelper.CreateContactPerson(resources.Context, customerTwo);
+
+        var requestModel = new GetCustomerContactsRequestModel { CustomerId = customerOne.CustomerId };
+
+        // when
+        var result = resources.Controller.GetCustomerContacts(requestModel) as List<ContactModel>;
+
+        // then
+        Assert.IsNotNull(result);
+        Assert.AreEqual(2, result.Count);
+
+        Assert.AreEqual(contactOne.ContactName, result[0].ContactName);
+        Assert.AreEqual(contactOne.ContactId, result[0].ContactId);
+        Assert.AreEqual(contactOne.ContactNo, result[0].ContactNo);
+        Assert.AreEqual(contactOne.EmailAddress, result[0].EmailAddress);
+        Assert.AreEqual(contactOne.CustomerId, result[0].CustomerId);
+
+        Assert.AreEqual(contactTwo.ContactName, result[1].ContactName);
+        Assert.AreEqual(contactTwo.ContactId, result[1].ContactId);
+        Assert.AreEqual(contactTwo.ContactNo, result[1].ContactNo);
+        Assert.AreEqual(contactTwo.EmailAddress, result[1].EmailAddress);
+        Assert.AreEqual(contactTwo.CustomerId, result[1].CustomerId);
+
+      }
+
     }
   }
 }

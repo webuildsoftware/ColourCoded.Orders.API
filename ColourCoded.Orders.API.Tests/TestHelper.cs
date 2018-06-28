@@ -57,21 +57,43 @@ namespace ColourCoded.Orders.API.Tests
       return orderDetail;
     }
 
-    public static Customer CreateCustomer(OrdersContext context, int personId, string customerName = "SMME", string customerAccountNo = "SMME007")
+    public static Customer CreateCustomer(OrdersContext context, string customerName = "SMME", int companyProfileId = 0, string username = "sa")
     {
       var customer = new Customer
       {
         CustomerName = customerName,
-        CustomerAccountNo = customerAccountNo,
-        PersonId = personId,
+        CompanyProfileId = companyProfileId,
+        CustomerDetails = "test details",
+        AccountNo = "DE232",
+        ContactNo = "0213435566",
+        EmailAddress = "someemail@gmail.com",
+        MobileNo = "0823334444",
         CreateDate = DateTime.Now,
-        CreateUser = "sa"
+        CreateUser = username
       };
 
       context.Customers.Add(customer);
       context.SaveChanges();
 
       return customer;
+    }
+
+    public static ContactPerson CreateContactPerson(OrdersContext context, Customer customer, string contactName = "SMME", string username = "sa")
+    {
+      var newContact = new ContactPerson
+      {
+        ContactName = contactName,
+        CustomerId = customer.CustomerId,
+        ContactNo = "0214475588",
+        EmailAddress = "contact@gmail.com",
+        CreateDate = DateTime.Now,
+        CreateUser = username
+      };
+
+      customer.ContactPeople.Add(newContact);
+      context.SaveChanges();
+
+      return newContact;
     }
 
     public static void RemoveTaxRates(OrdersContext context)
@@ -84,6 +106,10 @@ namespace ColourCoded.Orders.API.Tests
       context.Database.ExecuteSqlCommand("truncate table OrderHeads");
     }
 
+    public static void RemoveCustomers(OrdersContext context)
+    {
+      context.Database.ExecuteSqlCommand("truncate table Customers");
+    }
 
     public static TaxRate CreateTaxRate(OrdersContext context, decimal rate = 0.10M, string taxCode = "TESTTAX")
     {

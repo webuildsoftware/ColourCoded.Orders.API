@@ -312,5 +312,72 @@ namespace ColourCoded.Orders.API.Controllers
 
       return "Success";
     }
+
+    [HttpPost, Route("customers/get")]
+    public List<CustomerModel> GetOrderCustomers([FromBody]GetOrderCustomersRequestModel requestModel)
+    {
+      var customers = new List<CustomerModel>();
+
+      var userCustomers = Context.Customers.Where(o => o.CreateUser == requestModel.Username).Select(o => new CustomerModel
+      {
+        CustomerId = o.CustomerId,
+        CustomerName = o.CustomerName,
+        CompanyProfileId = o.CompanyProfileId,
+        CustomerDetails = o.CustomerDetails,
+        AccountNo = o.AccountNo,
+        ContactNo = o.ContactNo,
+        EmailAddress = o.EmailAddress,
+        MobileNo = o.MobileNo,
+        CreateDate = o.CreateDate,
+        CreateUser = o.CreateUser
+      }).ToList();
+
+      if (userCustomers != null) customers.AddRange(userCustomers);
+
+      if (requestModel.CompanyProfileId != 0)
+      {
+        var companyCustomers = Context.Customers.Where(o => o.CreateUser != requestModel.Username && o.CompanyProfileId == requestModel.CompanyProfileId).Select(o => new CustomerModel
+        {
+          CustomerId = o.CustomerId,
+          CustomerName = o.CustomerName,
+          CompanyProfileId = o.CompanyProfileId,
+          CustomerDetails = o.CustomerDetails,
+          AccountNo = o.AccountNo,
+          ContactNo = o.ContactNo,
+          EmailAddress = o.EmailAddress,
+          MobileNo = o.MobileNo,
+          CreateDate = o.CreateDate,
+          CreateUser = o.CreateUser
+        }).ToList();
+
+        if (companyCustomers != null) customers.AddRange(companyCustomers);
+      }
+
+      return customers;
+    }
+
+    [HttpPost, Route("customers/contacts/get")]
+    public List<ContactModel> GetCustomerContacts([FromBody]GetCustomerContactsRequestModel requestModel)
+    {
+      var contacts = new List<ContactModel>();
+
+      var customer = Context.Customers.Include(o => o.ContactPeople).Single(o => o.CustomerId == requestModel.CustomerId);
+
+      foreach(var contact in customer.ContactPeople)
+      {
+        contacts.Add(new ContactModel
+        {
+          ContactId = contact.ContactId,
+          ContactName = contact.ContactName,
+          ContactNo = contact.ContactNo,
+          EmailAddress = contact.EmailAddress,
+          CustomerId = contact.CustomerId,
+          CreateDate = contact.CreateDate,
+          CreateUser = contact.CreateUser
+        });
+      }
+
+      return contacts;
+    }
   }
 }

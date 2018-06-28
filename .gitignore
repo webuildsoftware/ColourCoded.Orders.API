@@ -18,3 +18,7 @@
 .vs/ColourCoded.Orders.API/DesignTimeBuild/.dtbcache
 .vs/ColourCoded.Orders.API/DesignTimeBuild/.dtbcache
 *.txt
+.vs/ColourCoded.Orders.API/v15/.suo
+*.pdb
+*.dll
+*.pdb
