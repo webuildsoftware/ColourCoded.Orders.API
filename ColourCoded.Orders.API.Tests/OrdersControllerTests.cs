@@ -727,5 +727,328 @@ namespace ColourCoded.Orders.API.Tests
       }
 
     }
+
+    [TestMethod]
+    public void AddOrder_NewCustomerNewContact_ReturnsAddOrderCustomerModel()
+    {
+      var resources = new Resources();
+
+      using (resources.Context.Database.BeginTransaction())
+      {
+        // given
+        TestHelper.RemoveCustomers(resources.Context);
+        var orderHead = TestHelper.CreateOrderHead(resources.Context);
+
+        var requestModel = new AddOrderCustomerRequestModel
+        {
+          OrderId = orderHead.OrderId,
+          CustomerId = 0,
+          CustomerName = "TestCustomer",
+          CustomerDetails = "Some Long Customer Description",
+          CustomerContactNo = "0214475588",
+          CustomerMobileNo = "0425584477",
+          CustomerAccountNo = "DE1234",
+          CustomerEmailAddress = "someemail@gmail.com",
+          ContactId = 0,
+          ContactAdded = true,
+          ContactEmailAddress = "contact@gmail.com",
+          ContactName = "ziziu",
+          ContactNo = "0218827777",
+          Username = resources.TestUsername,
+          CompanyProfileId = resources.CompanyProfileId
+        };
+
+        // when
+        var result = resources.Controller.AddCustomerOrder(requestModel);
+
+        // then
+        Assert.IsNotNull(result);
+        var saveCustomerDetail = resources.Context.Customers.Include(o => o.ContactPeople).First(o => o.CustomerId == orderHead.CustomerId);
+        Assert.IsNotNull(saveCustomerDetail);
+        Assert.IsNotNull(saveCustomerDetail.ContactPeople);
+        Assert.AreEqual(1, saveCustomerDetail.ContactPeople.Count);
+
+        Assert.IsTrue(saveCustomerDetail.AccountNo == requestModel.CustomerAccountNo);
+        Assert.IsTrue(saveCustomerDetail.CompanyProfileId == resources.CompanyProfileId);
+        Assert.IsTrue(saveCustomerDetail.CreateUser == resources.TestUsername);
+        Assert.IsTrue(saveCustomerDetail.ContactNo == requestModel.CustomerContactNo);
+        Assert.IsTrue(saveCustomerDetail.CustomerDetails == requestModel.CustomerDetails);
+        Assert.IsTrue(saveCustomerDetail.CustomerName == requestModel.CustomerName);
+        Assert.IsTrue(saveCustomerDetail.MobileNo == requestModel.CustomerMobileNo);
+        Assert.IsTrue(saveCustomerDetail.EmailAddress == requestModel.CustomerEmailAddress);
+        Assert.IsTrue(saveCustomerDetail.ContactPeople[0].ContactName == requestModel.ContactName);
+        Assert.IsTrue(saveCustomerDetail.ContactPeople[0].ContactNo == requestModel.ContactNo);
+        Assert.IsTrue(saveCustomerDetail.ContactPeople[0].EmailAddress == requestModel.ContactEmailAddress);
+        Assert.IsTrue(saveCustomerDetail.ContactPeople[0].CreateUser == resources.TestUsername);
+
+        Assert.AreEqual(saveCustomerDetail.CustomerId, result.CustomerId);
+        Assert.AreEqual(saveCustomerDetail.ContactPeople[0].CustomerId, result.ContactId);
+        Assert.AreEqual(orderHead.OrderId, result.OrderId);
+        Assert.AreEqual(orderHead.OrderNo, result.OrderNo);
+      }
+    }
+
+    [TestMethod]
+    public void AddOrder_NewCustomerNoContact_ReturnsAddOrderCustomerModel()
+    {
+      var resources = new Resources();
+
+      using (resources.Context.Database.BeginTransaction())
+      {
+        // given
+        TestHelper.RemoveCustomers(resources.Context);
+        var orderHead = TestHelper.CreateOrderHead(resources.Context);
+
+        var requestModel = new AddOrderCustomerRequestModel
+        {
+          OrderId = orderHead.OrderId,
+          CustomerId = 0,
+          CustomerName = "TestCustomer",
+          CustomerDetails = "Some Long Customer Description",
+          CustomerContactNo = "0214475588",
+          CustomerMobileNo = "0425584477",
+          CustomerAccountNo = "DE1234",
+          CustomerEmailAddress = "someemail@gmail.com",
+          ContactId = 0,
+          ContactAdded = false,
+          Username = resources.TestUsername,
+          CompanyProfileId = resources.CompanyProfileId
+        };
+
+        // when
+        var result = resources.Controller.AddCustomerOrder(requestModel);
+
+        // then
+        Assert.IsNotNull(result);
+        var saveCustomerDetail = resources.Context.Customers.Include(o => o.ContactPeople).First(o => o.CustomerId == orderHead.CustomerId);
+        Assert.IsNotNull(saveCustomerDetail);
+        Assert.IsNotNull(saveCustomerDetail.ContactPeople);
+        Assert.AreEqual(0, saveCustomerDetail.ContactPeople.Count);
+
+        Assert.IsTrue(saveCustomerDetail.AccountNo == requestModel.CustomerAccountNo);
+        Assert.IsTrue(saveCustomerDetail.CompanyProfileId == resources.CompanyProfileId);
+        Assert.IsTrue(saveCustomerDetail.CreateUser == resources.TestUsername);
+        Assert.IsTrue(saveCustomerDetail.ContactNo == requestModel.CustomerContactNo);
+        Assert.IsTrue(saveCustomerDetail.CustomerDetails == requestModel.CustomerDetails);
+        Assert.IsTrue(saveCustomerDetail.CustomerName == requestModel.CustomerName);
+        Assert.IsTrue(saveCustomerDetail.MobileNo == requestModel.CustomerMobileNo);
+        Assert.IsTrue(saveCustomerDetail.EmailAddress == requestModel.CustomerEmailAddress);
+
+        Assert.AreEqual(saveCustomerDetail.CustomerId, result.CustomerId);
+        Assert.AreEqual(orderHead.ContactId, result.ContactId);
+        Assert.AreEqual(orderHead.OrderId, result.OrderId);
+        Assert.AreEqual(orderHead.OrderNo, result.OrderNo);
+      }
+    }
+
+    [TestMethod]
+    public void AddOrder_NewCustomerExistingContact_ReturnsAddOrderCustomerModel()
+    {
+      var resources = new Resources();
+
+      using (resources.Context.Database.BeginTransaction())
+      {
+        // given
+        TestHelper.RemoveCustomers(resources.Context);
+        var customer = TestHelper.CreateCustomer(resources.Context, companyProfileId: resources.CompanyProfileId);
+        var contactPerson = TestHelper.CreateContactPerson(resources.Context, customer);
+        var orderHead = TestHelper.CreateOrderHead(resources.Context);
+
+        var requestModel = new AddOrderCustomerRequestModel
+        {
+          OrderId = orderHead.OrderId,
+          CustomerId = customer.CustomerId,
+          CustomerName = "TestCustomer",
+          CustomerDetails = "Some Long Customer Description",
+          CustomerContactNo = "0214475588",
+          CustomerMobileNo = "0425584477",
+          CustomerAccountNo = "DE1234",
+          CustomerEmailAddress = "someemail@gmail.com",
+          ContactId = contactPerson.ContactId,
+          ContactAdded = true,
+          ContactName = "testinganothername",
+          ContactEmailAddress = "asdf@gmail.com",
+          ContactNo = "123123123",
+          Username = resources.TestUsername,
+          CompanyProfileId = resources.CompanyProfileId
+        };
+
+        // when
+        var result = resources.Controller.AddCustomerOrder(requestModel);
+
+        // then
+        // then
+        Assert.IsNotNull(result);
+        var saveCustomerDetail = resources.Context.Customers.Include(o => o.ContactPeople).First(o => o.CustomerId == customer.CustomerId);
+        Assert.IsNotNull(saveCustomerDetail);
+        Assert.IsNotNull(saveCustomerDetail.ContactPeople);
+        Assert.AreEqual(1, saveCustomerDetail.ContactPeople.Count);
+
+        Assert.IsTrue(saveCustomerDetail.AccountNo == requestModel.CustomerAccountNo);
+        Assert.IsTrue(saveCustomerDetail.CompanyProfileId == resources.CompanyProfileId);
+        Assert.IsTrue(saveCustomerDetail.UpdateUser == resources.TestUsername);
+        Assert.IsTrue(saveCustomerDetail.ContactNo == requestModel.CustomerContactNo);
+        Assert.IsTrue(saveCustomerDetail.CustomerDetails == requestModel.CustomerDetails);
+        Assert.IsTrue(saveCustomerDetail.CustomerName == requestModel.CustomerName);
+        Assert.IsTrue(saveCustomerDetail.MobileNo == requestModel.CustomerMobileNo);
+        Assert.IsTrue(saveCustomerDetail.EmailAddress == requestModel.CustomerEmailAddress);
+        Assert.IsTrue(saveCustomerDetail.ContactPeople[0].ContactName == requestModel.ContactName);
+        Assert.IsTrue(saveCustomerDetail.ContactPeople[0].ContactNo == requestModel.ContactNo);
+        Assert.IsTrue(saveCustomerDetail.ContactPeople[0].EmailAddress == requestModel.ContactEmailAddress);
+        Assert.IsTrue(saveCustomerDetail.ContactPeople[0].UpdateUser == resources.TestUsername);
+
+        Assert.AreEqual(saveCustomerDetail.CustomerId, result.CustomerId);
+        Assert.AreEqual(saveCustomerDetail.ContactPeople[0].CustomerId, result.ContactId);
+        Assert.AreEqual(orderHead.OrderId, result.OrderId);
+        Assert.AreEqual(orderHead.OrderNo, result.OrderNo);
+      }
+    }
+
+    [TestMethod]
+    public void AddOrder_OldCustomerNewContact_ReturnsAddOrderCustomerModel()
+    {
+      var resources = new Resources();
+
+      using (resources.Context.Database.BeginTransaction())
+      {
+        // given
+        TestHelper.RemoveCustomers(resources.Context);
+        var orderHead = TestHelper.CreateOrderHead(resources.Context);
+        var customer = TestHelper.CreateCustomer(resources.Context);
+
+        var requestModel = new AddOrderCustomerRequestModel
+        {
+          OrderId = orderHead.OrderId,
+          CustomerId = customer.CustomerId,
+          CustomerName = "TestCustomer",
+          CustomerDetails = "Some Long Customer Description",
+          CustomerContactNo = "0214475588",
+          CustomerMobileNo = "0425584477",
+          CustomerAccountNo = "DE1234",
+          CustomerEmailAddress = "someemail@gmail.com",
+          ContactId = 0,
+          ContactAdded = true,
+          ContactEmailAddress = "contact@gmail.com",
+          ContactName = "ziziu",
+          ContactNo = "0218827777",
+          Username = resources.TestUsername,
+          CompanyProfileId = resources.CompanyProfileId
+        };
+
+        // when
+        var result = resources.Controller.AddCustomerOrder(requestModel);
+
+        // then
+        Assert.IsNotNull(result);
+        var saveCustomerDetail = resources.Context.Customers.Include(o => o.ContactPeople).First(o => o.CustomerId == customer.CustomerId);
+        Assert.IsNotNull(saveCustomerDetail);
+        Assert.IsNotNull(saveCustomerDetail.ContactPeople);
+        Assert.AreEqual(1, saveCustomerDetail.ContactPeople.Count);
+
+        Assert.IsTrue(saveCustomerDetail.AccountNo == requestModel.CustomerAccountNo);
+        Assert.IsTrue(saveCustomerDetail.ContactNo == requestModel.CustomerContactNo);
+        Assert.IsTrue(saveCustomerDetail.CustomerDetails == requestModel.CustomerDetails);
+        Assert.IsTrue(saveCustomerDetail.CustomerName == requestModel.CustomerName);
+        Assert.IsTrue(saveCustomerDetail.MobileNo == requestModel.CustomerMobileNo);
+        Assert.IsTrue(saveCustomerDetail.EmailAddress == requestModel.CustomerEmailAddress);
+        Assert.IsTrue(saveCustomerDetail.ContactPeople[0].ContactName == requestModel.ContactName);
+        Assert.IsTrue(saveCustomerDetail.ContactPeople[0].ContactNo == requestModel.ContactNo);
+        Assert.IsTrue(saveCustomerDetail.ContactPeople[0].EmailAddress == requestModel.ContactEmailAddress);
+        Assert.IsTrue(saveCustomerDetail.ContactPeople[0].CreateUser == resources.TestUsername);
+
+        Assert.AreEqual(saveCustomerDetail.CustomerId, result.CustomerId);
+        Assert.AreEqual(saveCustomerDetail.ContactPeople[0].CustomerId, result.ContactId);
+        Assert.AreEqual(orderHead.OrderId, result.OrderId);
+        Assert.AreEqual(orderHead.OrderNo, result.OrderNo);
+      }
+    }
+
+    [TestMethod]
+    public void AddOrder_OldCustomerNoContact_ReturnsAddOrderCustomerModel()
+    {
+      var resources = new Resources();
+
+      using (resources.Context.Database.BeginTransaction())
+      {
+        // given
+        TestHelper.RemoveCustomers(resources.Context);
+        var orderHead = TestHelper.CreateOrderHead(resources.Context);
+        var customer = TestHelper.CreateCustomer(resources.Context);
+
+        var requestModel = new AddOrderCustomerRequestModel
+        {
+          OrderId = orderHead.OrderId,
+          CustomerId = customer.CustomerId,
+          CustomerName = "TestCustomer",
+          CustomerDetails = "Some Long Customer Description",
+          CustomerContactNo = "0214475588",
+          CustomerMobileNo = "0425584477",
+          CustomerAccountNo = "DE1234",
+          CustomerEmailAddress = "someemail@gmail.com",
+          ContactId = 0,
+          ContactAdded = false,
+          Username = resources.TestUsername,
+          CompanyProfileId = resources.CompanyProfileId
+        };
+
+        // when
+        var result = resources.Controller.AddCustomerOrder(requestModel);
+
+        // then
+        Assert.IsNotNull(result);
+        var saveCustomerDetail = resources.Context.Customers.Include(o => o.ContactPeople).First(o => o.CustomerId == customer.CustomerId);
+        Assert.IsNotNull(saveCustomerDetail);
+        Assert.IsNotNull(saveCustomerDetail.ContactPeople);
+        Assert.AreEqual(0, saveCustomerDetail.ContactPeople.Count);
+
+        Assert.IsTrue(saveCustomerDetail.AccountNo == requestModel.CustomerAccountNo);
+        Assert.IsTrue(saveCustomerDetail.ContactNo == requestModel.CustomerContactNo);
+        Assert.IsTrue(saveCustomerDetail.CustomerDetails == requestModel.CustomerDetails);
+        Assert.IsTrue(saveCustomerDetail.CustomerName == requestModel.CustomerName);
+        Assert.IsTrue(saveCustomerDetail.MobileNo == requestModel.CustomerMobileNo);
+        Assert.IsTrue(saveCustomerDetail.EmailAddress == requestModel.CustomerEmailAddress);
+
+        Assert.AreEqual(saveCustomerDetail.CustomerId, result.CustomerId);
+        Assert.AreEqual(orderHead.ContactId, result.ContactId);
+        Assert.AreEqual(orderHead.OrderId, result.OrderId);
+        Assert.AreEqual(orderHead.OrderNo, result.OrderNo);
+      }
+    }
+
+    [TestMethod]
+    public void GetOrderCustomerDetails_Success()
+    {
+      var resources = new Resources();
+
+      using (resources.Context.Database.BeginTransaction())
+      {
+        // given
+        TestHelper.RemoveCustomers(resources.Context);
+        var customer = TestHelper.CreateCustomer(resources.Context);
+        var contact = TestHelper.CreateContactPerson(resources.Context, customer);
+        var orderHead = TestHelper.CreateOrderHead(resources.Context, customerId: customer.CustomerId, contactId: contact.ContactId);
+
+        var requestModel = new GetOrderCustomerDetailRequestModel { OrderId = orderHead.OrderId};
+
+        // when
+        var result = resources.Controller.GetOrderCustomerDetails(requestModel) as OrderCustomerDetailModel;
+
+        // then
+        Assert.IsNotNull(result);
+        Assert.AreEqual(customer.CustomerId, result.CustomerId);
+        Assert.AreEqual(customer.CustomerName, result.CustomerName);
+        Assert.AreEqual(customer.CustomerDetails, result.CustomerDetails);
+        Assert.AreEqual(customer.ContactNo, result.CustomerContactNo);
+        Assert.AreEqual(customer.EmailAddress, result.CustomerEmailAddress);
+        Assert.AreEqual(customer.AccountNo, result.CustomerAccountNo);
+        Assert.AreEqual(customer.MobileNo, result.CustomerMobileNo);
+        Assert.AreEqual(customer.ContactPeople[0].ContactId, result.ContactId);
+        Assert.AreEqual(customer.ContactPeople[0].ContactName, result.ContactName);
+        Assert.AreEqual(customer.ContactPeople[0].ContactNo, result.ContactNo);
+        Assert.AreEqual(customer.ContactPeople[0].EmailAddress, result.ContactEmailAddress);
+      }
+
+    }
+
   }
 }

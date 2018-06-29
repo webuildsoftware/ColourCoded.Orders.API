@@ -35,3 +35,10 @@
 .vs/ColourCoded.Orders.API/v15/.suo
 *.ide
 *.ide-shm
+.vs/ColourCoded.Orders.API/v15/.suo
+*.ide
+*.ide-shm
+*.pdb
+*.dll
+*.dll
+ColourCoded.Orders.API.Tests/obj/Debug/netcoreapp2.1/ColourCoded.Orders.API.Tests.csprojAssemblyReference.cache

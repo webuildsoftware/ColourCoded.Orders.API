@@ -379,5 +379,129 @@ namespace ColourCoded.Orders.API.Controllers
 
       return contacts;
     }
+
+    [HttpPost, Route("customers/add")]
+    public AddCustomerOrderModel AddCustomerOrder([FromBody]AddOrderCustomerRequestModel requestModel)
+    {
+      var orderHead = Context.Orders.First(o => o.OrderId == requestModel.OrderId);
+
+      var contact = new ContactPerson
+      {
+        ContactName = requestModel.ContactName,
+        ContactNo = requestModel.ContactNo,
+        EmailAddress = requestModel.ContactEmailAddress,
+        CreateDate = DateTime.Now,
+        CreateUser = requestModel.Username,
+      };
+
+      var existingCustomer = Context.Customers.Include(cp => cp.ContactPeople).FirstOrDefault(o => o.CustomerId == requestModel.CustomerId);
+
+      if(existingCustomer == null)
+      {
+        var newCustomer = new Customer
+        {
+          CustomerName = requestModel.CustomerName,
+          CustomerDetails = requestModel.CustomerDetails,
+          AccountNo = requestModel.CustomerAccountNo,
+          ContactNo = requestModel.CustomerContactNo,
+          EmailAddress = requestModel.CustomerEmailAddress,
+          MobileNo = requestModel.CustomerMobileNo,
+          CompanyProfileId = requestModel.CompanyProfileId,
+          CreateDate = DateTime.Now,
+          CreateUser = requestModel.Username,
+        };
+
+        if (requestModel.ContactAdded)
+          newCustomer.ContactPeople.Add(contact);
+
+        Context.Customers.Add(newCustomer);
+        Context.SaveChanges();
+
+        orderHead.CustomerId = newCustomer.CustomerId;
+        orderHead.UpdateDate = DateTime.Now;
+        orderHead.UpdateUser = requestModel.Username;
+
+        if (requestModel.ContactAdded)
+          orderHead.ContactId = contact.ContactId;
+
+        Context.SaveChanges();
+      }
+      else{
+        var existingContact = existingCustomer.ContactPeople.FirstOrDefault(cp => cp.ContactId == requestModel.ContactId);
+
+        existingCustomer.CustomerName = requestModel.CustomerName;
+        existingCustomer.CustomerDetails = requestModel.CustomerDetails;
+        existingCustomer.ContactNo = requestModel.CustomerContactNo;
+        existingCustomer.MobileNo = requestModel.CustomerMobileNo;
+        existingCustomer.EmailAddress = requestModel.CustomerEmailAddress;
+        existingCustomer.AccountNo = requestModel.CustomerAccountNo;
+        existingCustomer.UpdateDate = DateTime.Now;
+        existingCustomer.UpdateUser = requestModel.Username;
+
+        if (requestModel.ContactAdded && existingContact == null)
+          existingCustomer.ContactPeople.Add(contact);
+        else {
+          if (existingContact != null) {
+            existingContact.ContactName = contact.ContactName;
+            existingContact.ContactNo = contact.ContactNo;
+            existingContact.EmailAddress = contact.EmailAddress;
+            existingContact.UpdateDate = DateTime.Now;
+            existingContact.UpdateUser = requestModel.Username;
+          }          
+        }
+
+        orderHead.CustomerId = existingCustomer.CustomerId;
+        orderHead.UpdateDate = DateTime.Now;
+        orderHead.UpdateUser = requestModel.Username;
+        Context.SaveChanges();
+
+        if (requestModel.ContactAdded && existingContact == null)
+          orderHead.ContactId = contact.ContactId;
+        else
+        {
+          if (existingContact != null)
+            orderHead.ContactId = existingContact.ContactId;
+        }
+
+        Context.SaveChanges();
+      }
+
+      return new AddCustomerOrderModel
+      {
+        OrderId = orderHead.OrderId,
+        CustomerId = orderHead.CustomerId,
+        ContactId = orderHead.ContactId,
+        OrderNo = orderHead.OrderNo
+      };
+    }
+
+    [HttpPost, Route("customer/get")]
+    public OrderCustomerDetailModel GetOrderCustomerDetails([FromBody]GetOrderCustomerDetailRequestModel requestModel)
+    {
+      var orderHead = Context.Orders.First(o => o.OrderId == requestModel.OrderId);
+
+      var existingCustomer = Context.Customers.Include(cp => cp.ContactPeople).FirstOrDefault(o => o.CustomerId == orderHead.CustomerId);
+
+      var existingContact = existingCustomer.ContactPeople.FirstOrDefault(cp => cp.ContactId == orderHead.ContactId);
+
+      return new OrderCustomerDetailModel
+      {
+        CustomerId = existingCustomer.CustomerId,
+        CustomerName = existingCustomer.CustomerName,
+        CustomerDetails = existingCustomer.CustomerDetails,
+        CustomerContactNo = existingCustomer.ContactNo,
+        CustomerAccountNo = existingCustomer.AccountNo,
+        CustomerMobileNo = existingCustomer.MobileNo,
+        CustomerEmailAddress = existingCustomer.EmailAddress,
+        ContactId = orderHead.ContactId,
+        ContactAdded = existingContact != null ? true : false,
+        ContactName = existingContact != null ? existingContact.ContactName : string.Empty,
+        ContactNo = existingContact != null ? existingContact.ContactNo : string.Empty,
+        ContactEmailAddress = existingContact != null ? existingContact.EmailAddress ?? " " : string.Empty,
+        OrderId = orderHead.OrderId,
+        OrderNo = orderHead.OrderNo,
+        OrderCreateDate = orderHead.CreateDate
+      };
+    }
   }
 }

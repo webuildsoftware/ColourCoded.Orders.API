@@ -16,7 +16,7 @@ namespace ColourCoded.Orders.API.Tests
       return new OrdersContext(optionsBuilder.Options);
     }
 
-    public static OrderHead CreateOrderHead(OrdersContext context, string orderNo = "TEST13993", string salesPerson = "testuser", decimal salesTotal = 1110.0M, decimal salesVat = 110.0M, int salesDateAddMonths = 0, int companyProfileId = 0)
+    public static OrderHead CreateOrderHead(OrdersContext context, string orderNo = "TEST13993", string salesPerson = "testuser", decimal salesTotal = 1110.0M, decimal salesVat = 110.0M, int salesDateAddMonths = 0, int companyProfileId = 0, int customerId = 0, int contactId = 0)
     {
       var order = new OrderHead
       {
@@ -27,7 +27,9 @@ namespace ColourCoded.Orders.API.Tests
         VatTotal = salesVat,
         SubTotal = salesTotal - salesVat,
         DiscountTotal = 0.0M,
-        CompanyProfileId = companyProfileId
+        CompanyProfileId = companyProfileId,
+        CustomerId = customerId,
+        ContactId = contactId
       };
 
       context.Orders.Add(order);
@@ -109,6 +111,7 @@ namespace ColourCoded.Orders.API.Tests
     public static void RemoveCustomers(OrdersContext context)
     {
       context.Database.ExecuteSqlCommand("truncate table Customers");
+      context.Database.ExecuteSqlCommand("truncate table ContactPersons");
     }
 
     public static TaxRate CreateTaxRate(OrdersContext context, decimal rate = 0.10M, string taxCode = "TESTTAX")
