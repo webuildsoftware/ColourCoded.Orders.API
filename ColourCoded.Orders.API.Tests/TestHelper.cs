@@ -16,7 +16,7 @@ namespace ColourCoded.Orders.API.Tests
       return new OrdersContext(optionsBuilder.Options);
     }
 
-    public static OrderHead CreateOrderHead(OrdersContext context, string orderNo = "TEST13993", string salesPerson = "testuser", decimal salesTotal = 1110.0M, decimal salesVat = 110.0M, int salesDateAddMonths = 0, int companyProfileId = 0, int customerId = 0, int contactId = 0)
+    public static OrderHead CreateOrderHead(OrdersContext context, string orderNo = "TEST13993", string salesPerson = "testuser", decimal salesTotal = 1110.0M, decimal salesVat = 110.0M, int salesDateAddMonths = 0, int companyProfileId = 0, int customerId = 0, int contactId = 0, int addressDetailId = 0)
     {
       var order = new OrderHead
       {
@@ -29,7 +29,8 @@ namespace ColourCoded.Orders.API.Tests
         DiscountTotal = 0.0M,
         CompanyProfileId = companyProfileId,
         CustomerId = customerId,
-        ContactId = contactId
+        ContactId = contactId,
+        AddressDetailId = addressDetailId
       };
 
       context.Orders.Add(order);
@@ -96,6 +97,26 @@ namespace ColourCoded.Orders.API.Tests
       context.SaveChanges();
 
       return newContact;
+    }
+
+    public static AddressDetail CreateCustomerAddress(OrdersContext context, Customer customer, string addressType = "Delivery", string addressLine1 = "SMME", string addressLine2 = "sa", string city = "Cape Town", string country = "South Africa", string username = "testuser")
+    {
+      var newAddress = new AddressDetail
+      {
+        AddressType = addressType,
+        AddressLine1 = addressLine1,
+        AddressLine2 = addressLine2,
+        City = city,
+        PostalCode = "7786",
+        Country = country,
+        CreateUser = username,
+        CreateDate = DateTime.Now
+      };
+
+      customer.Addresses.Add(newAddress);
+      context.SaveChanges();
+
+      return newAddress;
     }
 
     public static void RemoveTaxRates(OrdersContext context)

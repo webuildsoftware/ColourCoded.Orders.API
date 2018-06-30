@@ -503,5 +503,112 @@ namespace ColourCoded.Orders.API.Controllers
         OrderCreateDate = orderHead.CreateDate
       };
     }
+
+    [HttpPost, Route("customer/address/getall")]
+    public List<AddressDetailsModel> GetCustomerAddresses([FromBody]GetCustomerAddressesRequestModel requestModel)
+    {
+      return Context.Customers.Include(c => c.Addresses).First(c => c.CustomerId == requestModel.CustomerId)
+        .Addresses.Select(model => new AddressDetailsModel
+        {
+          AddressDetailId = model.AddressDetailId,
+          AddressLine1 = model.AddressLine1,
+          AddressLine2= model.AddressLine2,
+          AddressType = model.AddressType,
+          City = model.City,
+          Country = model.Country,
+          PostalCode = model.PostalCode,
+          CreateDate = model.CreateDate,
+          CreateUser = model.CreateUser
+        }).ToList();
+
+    }
+
+    [HttpPost, Route("customer/address/add")]
+    public string AddCustomerOrderAddress([FromBody]AddCustomerOrderAddressRequestModel requestModel)
+    {
+      var customer = Context.Customers.Include(c => c.Addresses).First(c => c.CustomerId == requestModel.CustomerId);
+      var order = Context.Orders.First(o => o.OrderId == requestModel.OrderId);
+
+      if (requestModel.AddressDetailId == 0)
+      {
+        var newAddressDetail = new AddressDetail
+        {
+          AddressType = requestModel.AddressType,
+          AddressLine1 = requestModel.AddressLine1,
+          AddressLine2 = requestModel.AddressLine2,
+          City = requestModel.City,
+          Country = requestModel.Country,
+          PostalCode = requestModel.PostalCode,
+          CreateDate = DateTime.Now,
+          CreateUser = requestModel.Username
+        };
+
+        customer.Addresses.Add(newAddressDetail);
+
+        Context.SaveChanges();
+
+        order.AddressDetailId = newAddressDetail.AddressDetailId;
+        order.UpdateDate = DateTime.Now;
+        order.UpdateUser = requestModel.Username;
+
+        Context.SaveChanges();
+      }
+      else
+      {
+        var address = customer.Addresses.First(a => a.AddressDetailId == requestModel.AddressDetailId);
+        address.AddressType = requestModel.AddressType;
+        address.AddressLine1 = requestModel.AddressLine1;
+        address.AddressLine2 = requestModel.AddressLine2;
+        address.City = requestModel.City;
+        address.Country = requestModel.Country;
+        address.PostalCode = requestModel.PostalCode;
+        address.UpdateDate = DateTime.Now;
+        address.UpdateUser = requestModel.Username;
+
+        order.AddressDetailId = address.AddressDetailId;
+        order.UpdateDate = DateTime.Now;
+        order.UpdateUser = requestModel.Username;
+
+        Context.SaveChanges();
+      }
+
+      return "Success";
+    }
+
+    [HttpPost, Route("customer/address/remove")]
+    public string RemoveCustomerOrderAddress([FromBody] RemoveCustomerAddressRequestModel requestModel)
+    {
+      var customer = Context.Customers.Include(c => c.Addresses).First(c => c.CustomerId == requestModel.CustomerId);
+      customer.Addresses.RemoveAll(a => a.AddressDetailId == requestModel.AddressDetailId);
+
+      var order = Context.Orders.First(o => o.AddressDetailId == requestModel.AddressDetailId);
+      order.AddressDetailId = 0;
+      order.UpdateDate = DateTime.Now;
+      order.UpdateUser = requestModel.Username;
+
+      Context.SaveChanges();
+
+      return "Success";
+    }
+
+    [HttpPost, Route("customer/address/get")]
+    public AddressDetailsModel GetCustomerOrderAddress([FromBody]GetCustomerOrderAddressRequestModel requestModel)
+    {
+      var order = Context.Orders.First(o => o.OrderId == requestModel.OrderId);
+        
+      return Context.Customers.Include(c => c.Addresses).First(c => c.CustomerId == requestModel.CustomerId).Addresses.Select(model => new AddressDetailsModel
+        {
+          AddressDetailId = model.AddressDetailId,
+          AddressLine1 = model.AddressLine1,
+          AddressLine2 = model.AddressLine2,
+          AddressType = model.AddressType,
+          City = model.City,
+          Country = model.Country,
+          PostalCode = model.PostalCode,
+          CreateDate = model.CreateDate,
+          CreateUser = model.CreateUser
+        }).First(a => a.AddressDetailId == order.AddressDetailId);
+
+    }
   }
 }

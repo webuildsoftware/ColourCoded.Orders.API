@@ -18,10 +18,12 @@ namespace ColourCoded.Orders.API.Data.Entities.Orders
     public DateTime? UpdateDate { get; set; }
     public string UpdateUser { get; set; }
     public List<ContactPerson> ContactPeople { get; set; }
+    public List<AddressDetail> Addresses { get; set; }
 
     public Customer()
     {
       ContactPeople = new List<ContactPerson>();
+      Addresses = new List<AddressDetail>();
     }
   }
 }

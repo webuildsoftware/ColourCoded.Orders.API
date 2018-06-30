@@ -15,6 +15,7 @@ namespace ColourCoded.Orders.API.Data.Entities.Orders
     public int CompanyProfileId { get; set; }
     public int CustomerId { get; set; }
     public int ContactId { get; set; }
+    public int AddressDetailId { get; set; }
     public DateTime CreateDate { get; set; }
     public string CreateUser { get; set; }
     public DateTime? UpdateDate { get; set; }

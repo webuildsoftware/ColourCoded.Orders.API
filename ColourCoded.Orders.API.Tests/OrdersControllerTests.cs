@@ -1050,5 +1050,189 @@ namespace ColourCoded.Orders.API.Tests
 
     }
 
+    [TestMethod]
+    public void GetCustomerAddresses()
+    {
+      var resources = new Resources();
+
+      using (resources.Context.Database.BeginTransaction())
+      {
+        // Given
+        var customer = TestHelper.CreateCustomer(resources.Context);
+        var addressOne = TestHelper.CreateCustomerAddress(resources.Context, customer);
+        var addressTwo = TestHelper.CreateCustomerAddress(resources.Context, customer);
+        var requestModel = new GetCustomerAddressesRequestModel { CustomerId = customer.CustomerId };
+
+        // When 
+        var result = resources.Controller.GetCustomerAddresses(requestModel);
+
+        // Then
+        Assert.IsNotNull(result);
+        Assert.AreEqual(2, result.Count);
+
+        Assert.IsTrue(result.Any(o => o.AddressLine1 == addressOne.AddressLine1));
+        Assert.IsTrue(result.Any(o => o.AddressLine2 == addressOne.AddressLine2));
+        Assert.IsTrue(result.Any(o => o.City == addressOne.City));
+        Assert.IsTrue(result.Any(o => o.Country == addressOne.Country));
+        Assert.IsTrue(result.Any(o => o.PostalCode == addressOne.PostalCode));
+
+        Assert.IsTrue(result.Any(o => o.AddressLine1 == addressTwo.AddressLine1));
+        Assert.IsTrue(result.Any(o => o.AddressLine2 == addressTwo.AddressLine2));
+        Assert.IsTrue(result.Any(o => o.City == addressTwo.City));
+        Assert.IsTrue(result.Any(o => o.Country == addressTwo.Country));
+        Assert.IsTrue(result.Any(o => o.PostalCode == addressTwo.PostalCode));
+
+      }
+      
+    }
+
+    [TestMethod]
+    public void GetCustomerAddress()
+    {
+      var resources = new Resources();
+
+      using (resources.Context.Database.BeginTransaction())
+      {
+        // Given
+        var customer = TestHelper.CreateCustomer(resources.Context);
+        var addressOne = TestHelper.CreateCustomerAddress(resources.Context, customer);
+        var orderHead = TestHelper.CreateOrderHead(resources.Context, addressDetailId: addressOne.AddressDetailId);
+        var requestModel = new GetCustomerOrderAddressRequestModel { CustomerId = customer.CustomerId, OrderId = orderHead.OrderId };
+
+        // When 
+        var result = resources.Controller.GetCustomerOrderAddress(requestModel) as AddressDetailsModel;
+
+        // Then
+        Assert.IsNotNull(result);
+        Assert.AreEqual(result.AddressDetailId, addressOne.AddressDetailId);
+        Assert.AreEqual(result.AddressLine1, addressOne.AddressLine1);
+        Assert.AreEqual(result.AddressLine2, addressOne.AddressLine2);
+        Assert.AreEqual(result.AddressType, addressOne.AddressType);
+        Assert.AreEqual(result.City, addressOne.City);
+        Assert.AreEqual(result.Country, addressOne.Country);
+        Assert.AreEqual(result.PostalCode, addressOne.PostalCode);
+      }
+
+    }
+
+    [TestMethod]
+    public void AddCustomerOrderNewAddress()
+    {
+      var resources = new Resources();
+
+      using (resources.Context.Database.BeginTransaction())
+      {
+        // Given
+        var customer = TestHelper.CreateCustomer(resources.Context);
+        var orderHead = TestHelper.CreateOrderHead(resources.Context);
+
+        var requestModel = new AddCustomerOrderAddressRequestModel
+        {
+          AddressType = "Delivery",
+          AddressLine1 = "City Of Cape Town",
+          AddressLine2 = "Adderley Street",
+          City = "Cape Town",
+          PostalCode = "7800",
+          Country = "South Africa",
+          Username = resources.TestUsername,
+          OrderId = orderHead.OrderId,
+          CustomerId = customer.CustomerId
+        };
+
+        // When 
+        var result = resources.Controller.AddCustomerOrderAddress(requestModel) as string;
+
+        // Then
+        Assert.IsNotNull(result);
+        Assert.AreEqual("Success", result);
+
+        Assert.IsTrue(customer.Addresses.Any(o => o.AddressLine1 == requestModel.AddressLine1));
+        Assert.IsTrue(customer.Addresses.Any(o => o.AddressLine2 == requestModel.AddressLine2));
+        Assert.IsTrue(customer.Addresses.Any(o => o.City == requestModel.City));
+        Assert.IsTrue(customer.Addresses.Any(o => o.Country == requestModel.Country));
+        Assert.IsTrue(customer.Addresses.Any(o => o.PostalCode == requestModel.PostalCode));
+        Assert.IsTrue(customer.Addresses.Any(o => o.AddressType == requestModel.AddressType));
+        Assert.IsTrue(customer.Addresses.Any(o => o.CreateUser == requestModel.Username));
+        Assert.AreEqual(customer.Addresses[0].AddressDetailId, orderHead.AddressDetailId);
+      }
+
+    }
+
+    [TestMethod]
+    public void AddCustomerOrderExistingAddress()
+    {
+      var resources = new Resources();
+
+      using (resources.Context.Database.BeginTransaction())
+      {
+        // Given
+        var customer = TestHelper.CreateCustomer(resources.Context);
+        var orderHead = TestHelper.CreateOrderHead(resources.Context);
+        var address = TestHelper.CreateCustomerAddress(resources.Context, customer);
+
+        var requestModel = new AddCustomerOrderAddressRequestModel
+        {
+          AddressDetailId = address.AddressDetailId,
+          AddressType = "Delivery",
+          AddressLine1 = "City Of Cape Town",
+          AddressLine2 = "Adderley Street",
+          City = "Cape Town",
+          PostalCode = "7800",
+          Country = "South Africa",
+          Username = resources.TestUsername,
+          OrderId = orderHead.OrderId,
+          CustomerId = customer.CustomerId
+        };
+
+        // When 
+        var result = resources.Controller.AddCustomerOrderAddress(requestModel) as string;
+
+        // Then
+        Assert.IsNotNull(result);
+        Assert.AreEqual("Success", result);
+
+        Assert.IsTrue(customer.Addresses.Any(o => o.AddressLine1 == requestModel.AddressLine1));
+        Assert.IsTrue(customer.Addresses.Any(o => o.AddressLine2 == requestModel.AddressLine2));
+        Assert.IsTrue(customer.Addresses.Any(o => o.City == requestModel.City));
+        Assert.IsTrue(customer.Addresses.Any(o => o.Country == requestModel.Country));
+        Assert.IsTrue(customer.Addresses.Any(o => o.PostalCode == requestModel.PostalCode));
+        Assert.IsTrue(customer.Addresses.Any(o => o.AddressType == requestModel.AddressType));
+        Assert.IsTrue(customer.Addresses.Any(o => o.CreateUser == requestModel.Username));
+        Assert.AreEqual(customer.Addresses[0].AddressDetailId, orderHead.AddressDetailId);
+      }
+
+    }
+
+    [TestMethod]
+    public void RemoveCustomerOrderAddress()
+    {
+      var resources = new Resources();
+
+      using (resources.Context.Database.BeginTransaction())
+      {
+        // Given
+        var customer = TestHelper.CreateCustomer(resources.Context);
+        var address = TestHelper.CreateCustomerAddress(resources.Context, customer);
+        var orderHead = TestHelper.CreateOrderHead(resources.Context, addressDetailId: address.AddressDetailId);
+
+        var requestModel = new RemoveCustomerAddressRequestModel
+        {
+          AddressDetailId = address.AddressDetailId,
+          CustomerId = customer.CustomerId,
+          Username = resources.TestUsername
+        };
+
+        // When 
+        var result = resources.Controller.RemoveCustomerOrderAddress(requestModel) as string;
+
+        // Then
+        Assert.IsNotNull(result);
+        Assert.AreEqual("Success", result);
+        Assert.AreEqual(0, customer.Addresses.Count);
+        Assert.AreEqual(0, orderHead.AddressDetailId);
+      }
+
+    }
+
   }
 }

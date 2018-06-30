@@ -10,6 +10,7 @@
   [CompanyProfileId] [int] DEFAULT(0) NOT NULL,
   [CustomerId] INT DEFAULT(0) NOT NULL,
   [ContactId] INT DEFAULT(0) NOT NULL,
+  [AddressDetailId] INT DEFAULT(0) NOT NULL,
   [CreateDate] DATETIME2 NOT NULL,
   [CreateUser] VARCHAR(255) NOT NULL,
   [UpdateUser] VARCHAR(255) NULL,

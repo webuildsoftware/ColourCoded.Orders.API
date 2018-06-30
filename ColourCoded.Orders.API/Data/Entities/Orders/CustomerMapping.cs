@@ -12,6 +12,7 @@ namespace ColourCoded.Orders.API.Data.Entities.Orders
       builder.HasKey("CustomerId");
 
       builder.HasMany(c => c.ContactPeople);
+      builder.HasMany(c => c.Addresses);
     }
   }
 }
