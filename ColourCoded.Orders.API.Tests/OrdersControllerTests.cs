@@ -1234,5 +1234,26 @@ namespace ColourCoded.Orders.API.Tests
 
     }
 
+    [TestMethod]
+    public void AcceptOrder()
+    {
+      var resources = new Resources();
+
+      using (resources.Context.Database.BeginTransaction())
+      {
+        // given
+        var order = TestHelper.CreateOrderHead(resources.Context);
+        var requestModel = new AcceptOrderRequestModel { OrderId = order.OrderId, Username = resources.TestUsername };
+
+        // when
+        var result = resources.Controller.AcceptOrder(requestModel);
+
+        // then
+        Assert.IsNotNull(result);
+        Assert.AreEqual("Success", result);
+        Assert.AreEqual("ACCEPTED", order.Status.ToUpper());
+        Assert.AreEqual(resources.TestUsername, order.UpdateUser);
+      }
+    }
   }
 }

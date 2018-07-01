@@ -49,7 +49,8 @@ namespace ColourCoded.Orders.API.Controllers
           OrderId = o.OrderId,
           OrderNo = o.OrderNo,
           CreateDate = o.CreateDate.ToShortDateString(),
-          Total = o.OrderTotal.ToString("R # ###.#0")
+          Total = o.OrderTotal.ToString("R # ###.#0"),
+          Status = o.Status
         }).ToList();
 
       if (userOrders != null) orders.AddRange(userOrders);
@@ -62,7 +63,8 @@ namespace ColourCoded.Orders.API.Controllers
             OrderId = o.OrderId,
             OrderNo = o.OrderNo,
             CreateDate = o.CreateDate.ToShortDateString(),
-            Total = o.OrderTotal.ToString("R # ###.#0")
+            Total = o.OrderTotal.ToString("R # ###.#0"),
+            Status = o.Status
           }).ToList();
 
         if (companyOrders != null) orders.AddRange(companyOrders);
@@ -82,7 +84,8 @@ namespace ColourCoded.Orders.API.Controllers
           OrderId = o.OrderId,
           OrderNo = o.OrderNo,
           CreateDate = o.CreateDate.ToShortDateString(),
-          Total = o.OrderTotal.ToString("R # ###.#0")
+          Total = o.OrderTotal.ToString("R # ###.#0"),
+          Status = o.Status
         }).ToList();
 
       if (userOrders != null) orders.AddRange(userOrders);
@@ -95,7 +98,8 @@ namespace ColourCoded.Orders.API.Controllers
             OrderId = o.OrderId,
             OrderNo = o.OrderNo,
             CreateDate = o.CreateDate.ToShortDateString(),
-            Total = o.OrderTotal.ToString("R # ###.#0")
+            Total = o.OrderTotal.ToString("R # ###.#0"),
+            Status = o.Status
           }).ToList();
 
         if (companyOrders != null) orders.AddRange(companyOrders);
@@ -243,6 +247,9 @@ namespace ColourCoded.Orders.API.Controllers
     public OrderDetailModel GetOrderDetail([FromBody]GetOrderDetailRequestModel requestModel)
     {
       var existingOrder = Context.Orders.Include(o => o.OrderDetails).Single(o => o.OrderId == requestModel.OrderId);
+
+      if (existingOrder == null)
+        return new OrderDetailModel();
 
       var result = new OrderDetailModel
       {
@@ -398,6 +405,7 @@ namespace ColourCoded.Orders.API.Controllers
 
       if(existingCustomer == null)
       {
+        // insert customer details
         var newCustomer = new Customer
         {
           CustomerName = requestModel.CustomerName,
@@ -427,8 +435,7 @@ namespace ColourCoded.Orders.API.Controllers
         Context.SaveChanges();
       }
       else{
-        var existingContact = existingCustomer.ContactPeople.FirstOrDefault(cp => cp.ContactId == requestModel.ContactId);
-
+        // edit customer details
         existingCustomer.CustomerName = requestModel.CustomerName;
         existingCustomer.CustomerDetails = requestModel.CustomerDetails;
         existingCustomer.ContactNo = requestModel.CustomerContactNo;
@@ -438,32 +445,37 @@ namespace ColourCoded.Orders.API.Controllers
         existingCustomer.UpdateDate = DateTime.Now;
         existingCustomer.UpdateUser = requestModel.Username;
 
+        var existingContact = existingCustomer.ContactPeople.FirstOrDefault(cp => cp.ContactId == requestModel.ContactId);
+        // insert contact person details
+
         if (requestModel.ContactAdded && existingContact == null)
+        {
+          // new contact person
           existingCustomer.ContactPeople.Add(contact);
-        else {
-          if (existingContact != null) {
-            existingContact.ContactName = contact.ContactName;
-            existingContact.ContactNo = contact.ContactNo;
-            existingContact.EmailAddress = contact.EmailAddress;
-            existingContact.UpdateDate = DateTime.Now;
-            existingContact.UpdateUser = requestModel.Username;
-          }          
+
+          Context.SaveChanges();
+          orderHead.ContactId = contact.ContactId;
         }
+        else if (requestModel.ContactAdded && existingContact != null)
+        {
+          // existing contact person
+          existingContact.ContactName = contact.ContactName;
+          existingContact.ContactNo = contact.ContactNo;
+          existingContact.EmailAddress = contact.EmailAddress;
+          existingContact.UpdateDate = DateTime.Now;
+          existingContact.UpdateUser = requestModel.Username;
+
+          orderHead.ContactId = existingContact.ContactId;
+          Context.SaveChanges();
+        }
+        else if (!requestModel.ContactAdded) // no contact person linked to order
+          orderHead.ContactId = 0;
 
         orderHead.CustomerId = existingCustomer.CustomerId;
         orderHead.UpdateDate = DateTime.Now;
         orderHead.UpdateUser = requestModel.Username;
         Context.SaveChanges();
 
-        if (requestModel.ContactAdded && existingContact == null)
-          orderHead.ContactId = contact.ContactId;
-        else
-        {
-          if (existingContact != null)
-            orderHead.ContactId = existingContact.ContactId;
-        }
-
-        Context.SaveChanges();
       }
 
       return new AddCustomerOrderModel
@@ -481,6 +493,9 @@ namespace ColourCoded.Orders.API.Controllers
       var orderHead = Context.Orders.First(o => o.OrderId == requestModel.OrderId);
 
       var existingCustomer = Context.Customers.Include(cp => cp.ContactPeople).FirstOrDefault(o => o.CustomerId == orderHead.CustomerId);
+
+      if (existingCustomer == null)
+        return new OrderCustomerDetailModel();
 
       var existingContact = existingCustomer.ContactPeople.FirstOrDefault(cp => cp.ContactId == orderHead.ContactId);
 
@@ -581,10 +596,14 @@ namespace ColourCoded.Orders.API.Controllers
       var customer = Context.Customers.Include(c => c.Addresses).First(c => c.CustomerId == requestModel.CustomerId);
       customer.Addresses.RemoveAll(a => a.AddressDetailId == requestModel.AddressDetailId);
 
-      var order = Context.Orders.First(o => o.AddressDetailId == requestModel.AddressDetailId);
-      order.AddressDetailId = 0;
-      order.UpdateDate = DateTime.Now;
-      order.UpdateUser = requestModel.Username;
+      var order = Context.Orders.FirstOrDefault(o => o.AddressDetailId != 0 && o.AddressDetailId == requestModel.AddressDetailId);
+
+      if(order != null)
+      {
+        order.AddressDetailId = 0;
+        order.UpdateDate = DateTime.Now;
+        order.UpdateUser = requestModel.Username;
+      }
 
       Context.SaveChanges();
 
@@ -595,8 +614,11 @@ namespace ColourCoded.Orders.API.Controllers
     public AddressDetailsModel GetCustomerOrderAddress([FromBody]GetCustomerOrderAddressRequestModel requestModel)
     {
       var order = Context.Orders.First(o => o.OrderId == requestModel.OrderId);
+
+      if (order.AddressDetailId == 0)
+        return new AddressDetailsModel();
         
-      return Context.Customers.Include(c => c.Addresses).First(c => c.CustomerId == requestModel.CustomerId).Addresses.Select(model => new AddressDetailsModel
+      var address = Context.Customers.Include(c => c.Addresses).First(c => c.CustomerId == requestModel.CustomerId).Addresses.Select(model => new AddressDetailsModel
         {
           AddressDetailId = model.AddressDetailId,
           AddressLine1 = model.AddressLine1,
@@ -609,6 +631,24 @@ namespace ColourCoded.Orders.API.Controllers
           CreateUser = model.CreateUser
         }).First(a => a.AddressDetailId == order.AddressDetailId);
 
+      address.CustomerName = Context.Customers.Include(c => c.Addresses).First(c => c.CustomerId == requestModel.CustomerId).CustomerName;
+
+      return address;
+
+    }
+
+    [HttpPost, Route("accept")]
+    public string AcceptOrder([FromBody]AcceptOrderRequestModel requestModel)
+    {
+      var order = Context.Orders.First(o => o.OrderId == requestModel.OrderId);
+
+      order.Status = OrdersConstants.AcceptStatus;
+      order.UpdateDate = DateTime.Now;
+      order.UpdateUser = requestModel.Username;
+
+      Context.SaveChanges();
+
+      return "Success";
     }
   }
 }

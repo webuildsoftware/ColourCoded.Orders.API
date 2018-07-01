@@ -16,6 +16,7 @@ namespace ColourCoded.Orders.API.Data.Entities.Orders
     public int CustomerId { get; set; }
     public int ContactId { get; set; }
     public int AddressDetailId { get; set; }
+    public string Status { get; set; }
     public DateTime CreateDate { get; set; }
     public string CreateUser { get; set; }
     public DateTime? UpdateDate { get; set; }
@@ -24,6 +25,7 @@ namespace ColourCoded.Orders.API.Data.Entities.Orders
 
     public OrderHead()
     {
+      Status = "Held";
       OrderDetails = new List<OrderDetail>();
     }
   }

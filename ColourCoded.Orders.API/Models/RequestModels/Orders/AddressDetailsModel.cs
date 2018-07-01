@@ -4,6 +4,7 @@ namespace ColourCoded.Orders.API.Models.RequestModels.Orders
 {
   public class AddressDetailsModel
   {
+    public string CustomerName { get; set; }
     public int AddressDetailId { get; set; }
     public string AddressType { get; set; }
     public string AddressLine1 { get; set; }
