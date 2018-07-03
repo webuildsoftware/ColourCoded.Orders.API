@@ -174,5 +174,45 @@ namespace ColourCoded.Orders.API.Tests
 
       return company;
     }
+
+    public static CompanyAddressDetail CreateCompanyAddress(OrdersContext context, CompanyProfile company, string addressType = "Delivery", string addressLine1 = "SMME", string addressLine2 = "sa", string city = "Cape Town", string country = "South Africa", string username = "testuser")
+    {
+      var newAddress = new CompanyAddressDetail
+      {
+        AddressType = addressType,
+        AddressLine1 = addressLine1,
+        AddressLine2 = addressLine2,
+        City = city,
+        PostalCode = "7786",
+        Country = country,
+        CreateUser = username,
+        CreateDate = DateTime.Now
+      };
+
+      company.Addresses.Add(newAddress);
+      context.SaveChanges();
+
+      return newAddress;
+    }
+
+    public static CompanyBankingDetail CreateCompanyBankingDetail(OrdersContext context, CompanyProfile company, string accountType = "Savings", string bankName = "ABSA", string branchCode = "632005", string accountNo = "90000332", string accountHolder = "Mr Absa Banker", string username = "testuser")
+    {
+      var newBankingDetail = new CompanyBankingDetail
+      {
+        AccountType = accountType,
+        AccountHolder = accountHolder,
+        AccountNo = accountNo,
+        BankName = bankName,
+        BranchCode = branchCode,
+        CreateUser = username,
+        CreateDate = DateTime.Now
+      };
+
+      company.BankingDetails.Add(newBankingDetail);
+      context.SaveChanges();
+
+      return newBankingDetail;
+    }
+
   }
 }

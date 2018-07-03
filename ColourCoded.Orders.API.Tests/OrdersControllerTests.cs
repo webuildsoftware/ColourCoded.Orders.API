@@ -1,8 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Caching.Memory;
-using ColourCoded.Orders.API.Shared;
 using ColourCoded.Orders.API.Models.RequestModels.Orders;
 using ColourCoded.Orders.API.Controllers;
 using ColourCoded.Orders.API.Data;
@@ -1253,6 +1251,76 @@ namespace ColourCoded.Orders.API.Tests
         Assert.AreEqual("Success", result);
         Assert.AreEqual("ACCEPTED", order.Status.ToUpper());
         Assert.AreEqual(resources.TestUsername, order.UpdateUser);
+      }
+    }
+
+    [TestMethod]
+    public void GetOrderQuote()
+    {
+      var resources = new Resources();
+
+      using (resources.Context.Database.BeginTransaction())
+      {
+        // Given
+        var companyProfile = TestHelper.CreateCompany(resources.Context);
+        var companyAddress = TestHelper.CreateCompanyAddress(resources.Context, companyProfile);
+        var companyBankingDetails = TestHelper.CreateCompanyBankingDetail(resources.Context, companyProfile);
+        var customer = TestHelper.CreateCustomer(resources.Context, companyProfileId: companyProfile.CompanyProfileId);
+        var customerAddress = TestHelper.CreateCustomerAddress(resources.Context, customer);
+        var contactPerson = TestHelper.CreateContactPerson(resources.Context, customer);
+        var order = TestHelper.CreateOrderHead(resources.Context, customerId: customer.CustomerId, companyProfileId: companyProfile.CompanyProfileId, contactId: contactPerson.ContactId, addressDetailId: customerAddress.AddressDetailId);
+        var orderDetails = TestHelper.CreateOrderDetail(resources.Context, order);
+
+        var requestModel = new GetOrderQuoteRequestModel { OrderId = order.OrderId, CompanyProfileId = companyProfile.CompanyProfileId };
+
+        // When
+        var result = resources.Controller.GetOrderQuote(requestModel) as OrderQuotationViewModel;
+
+        // Then
+        Assert.IsNotNull(result);
+
+        // assert Company details
+        Assert.AreEqual(result.CompanyProfile.AddressLine1, companyAddress.AddressLine1);
+        Assert.AreEqual(result.CompanyProfile.AddressLine2, companyAddress.AddressLine2);
+        Assert.AreEqual(result.CompanyProfile.City, companyAddress.City);
+        Assert.AreEqual(result.CompanyProfile.Country, companyAddress.Country);
+        Assert.AreEqual(result.CompanyProfile.DisplayName, companyProfile.DisplayName);
+        Assert.AreEqual(result.CompanyProfile.EmailAddress, companyProfile.EmailAddress);
+        Assert.AreEqual(result.CompanyProfile.PostalCode, companyAddress.PostalCode);
+        Assert.AreEqual(result.CompanyProfile.RegistrationNo, companyProfile.RegistrationNo);
+        Assert.AreEqual(result.CompanyProfile.TaxReferenceNo, companyProfile.TaxReferenceNo);
+        Assert.AreEqual(result.CompanyProfile.TelephoneNo, companyProfile.TelephoneNo);
+
+        // assert Company details
+        Assert.AreEqual(result.CustomerDetail.CustomerAccountNo, customer.AccountNo);
+        Assert.AreEqual(result.CustomerDetail.CustomerDetails, customer.CustomerDetails);
+        Assert.AreEqual(result.CustomerDetail.CustomerEmailAddress, customer.EmailAddress);
+        Assert.AreEqual(result.CustomerDetail.CustomerName, customer.CustomerName);
+        Assert.AreEqual(result.CustomerDetail.CustomerContactNo, customer.ContactNo);
+        Assert.AreEqual(result.CustomerDetail.ContactName, contactPerson.ContactName);
+        Assert.AreEqual(result.CustomerDetail.ContactNo, contactPerson.ContactNo);
+        Assert.AreEqual(result.CustomerDetail.ContactEmailAddress, contactPerson.EmailAddress);
+
+        // assert delivery address details
+        Assert.AreEqual(result.DeliveryAddress.AddressLine1, customerAddress.AddressLine1);
+        Assert.AreEqual(result.DeliveryAddress.AddressLine2, customerAddress.AddressLine2);
+        Assert.AreEqual(result.DeliveryAddress.City, customerAddress.City);
+        Assert.AreEqual(result.DeliveryAddress.Country, customerAddress.Country);
+        Assert.AreEqual(result.DeliveryAddress.PostalCode, customerAddress.PostalCode);
+
+        // assert order details and order totals
+        Assert.AreEqual(result.OrderTotals.OrderNo, order.OrderNo);
+        Assert.AreEqual(result.OrderTotals.Discount, order.DiscountTotal);
+        Assert.AreEqual(result.OrderTotals.OrderId, order.OrderId);
+        Assert.AreEqual(result.OrderTotals.SubTotal, order.SubTotal);
+        Assert.AreEqual(result.OrderTotals.Total, order.OrderTotal);
+        Assert.AreEqual(result.OrderTotals.VatTotal, order.VatTotal);
+
+        Assert.AreEqual(result.OrderTotals.OrderLineDetails[0].Discount, orderDetails.Discount);
+        Assert.AreEqual(result.OrderTotals.OrderLineDetails[0].ItemDescription, orderDetails.ItemDescription);
+        Assert.AreEqual(result.OrderTotals.OrderLineDetails[0].Quantity, orderDetails.Quantity);
+        Assert.AreEqual(result.OrderTotals.OrderLineDetails[0].UnitPrice, orderDetails.UnitPrice);
+        Assert.AreEqual(result.OrderTotals.OrderLineDetails[0].LineTotal, orderDetails.LineTotal);
       }
     }
   }

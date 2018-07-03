@@ -650,5 +650,109 @@ namespace ColourCoded.Orders.API.Controllers
 
       return "Success";
     }
+
+    [HttpPost, Route("quote/get")]
+    public OrderQuotationViewModel GetOrderQuote([FromBody]GetOrderQuoteRequestModel requestModel)
+    {
+      var companyProfile = new CompanyProfileModel();
+      var customerDetails = new OrderCustomerDetailModel();
+      var orderDetails = new OrderDetailModel();
+      var addressDetails = new AddressDetailsModel();
+
+      var existingCompany = Context.CompanyProfiles.Include(cp => cp.BankingDetails).Include(cp => cp.Addresses).FirstOrDefault(cp => cp.CompanyProfileId == requestModel.CompanyProfileId);
+
+      if (existingCompany != null)
+      {
+        companyProfile.DisplayName = existingCompany.DisplayName;
+        companyProfile.RegistrationNo = existingCompany.RegistrationNo;
+        companyProfile.TaxReferenceNo = existingCompany.TaxReferenceNo;
+        companyProfile.TelephoneNo = existingCompany.TelephoneNo;
+        companyProfile.EmailAddress = existingCompany.EmailAddress;
+
+        if (existingCompany.Addresses.Count > 0)
+        {
+          companyProfile.AddressLine1 = existingCompany.Addresses[0].AddressLine1;
+          companyProfile.AddressLine2 = existingCompany.Addresses[0].AddressLine2;
+          companyProfile.City = existingCompany.Addresses[0].City;
+          companyProfile.Country = existingCompany.Addresses[0].Country;
+          companyProfile.PostalCode = existingCompany.Addresses[0].PostalCode;
+        }
+
+        if(existingCompany.BankingDetails.Count > 0)
+        {
+          companyProfile.BankingDetails = new BankingDetailsModel
+          {
+            AccountHolder = existingCompany.BankingDetails[0].AccountHolder,
+            AccountNo = existingCompany.BankingDetails[0].AccountNo,
+            BankName = existingCompany.BankingDetails[0].BankName,
+            AccountType = existingCompany.BankingDetails[0].AccountType,
+            BranchCode = existingCompany.BankingDetails[0].BranchCode,
+          };
+        }
+      }
+
+      var order = Context.Orders.Include(o => o.OrderDetails).First(o => o.OrderId == requestModel.OrderId);
+      var existingCustomer = Context.Customers.Include(c => c.Addresses).Include(c => c.ContactPeople).FirstOrDefault(c => c.CustomerId == order.CustomerId);
+
+      var existingContact = existingCustomer != null ? existingCustomer.ContactPeople.FirstOrDefault(cp => cp.ContactId == order.ContactId) : null;
+      var existingAddresss = existingCustomer != null ? existingCustomer.Addresses.FirstOrDefault(cp => cp.AddressDetailId == order.AddressDetailId) : null;
+
+      if (existingCustomer != null)
+      {
+        customerDetails.OrderId = order.OrderId;
+        customerDetails.CustomerName = existingCustomer.CustomerName;
+        customerDetails.CustomerContactNo = existingCustomer.ContactNo;
+        customerDetails.CustomerAccountNo = existingCustomer.AccountNo;
+        customerDetails.CustomerDetails = existingCustomer.CustomerDetails;
+        customerDetails.CustomerEmailAddress = existingCustomer.EmailAddress;
+
+        if(existingContact != null)
+        {
+          customerDetails.ContactName = existingContact.ContactName;
+          customerDetails.ContactNo = existingContact.ContactNo;
+          customerDetails.ContactEmailAddress = existingContact.EmailAddress;
+        }
+
+        if(existingAddresss != null)
+        {
+          addressDetails.AddressLine1 = existingAddresss.AddressLine1;
+          addressDetails.AddressLine2 = existingAddresss.AddressLine2;
+          addressDetails.City = existingAddresss.City;
+          addressDetails.Country = existingAddresss.Country;
+          addressDetails.PostalCode = existingAddresss.PostalCode;
+        }
+      }
+
+      orderDetails.Discount = order.DiscountTotal;
+      orderDetails.OrderNo = order.OrderNo;
+      orderDetails.OrderId = order.OrderId;
+      orderDetails.CreateDate = order.CreateDate;
+      orderDetails.CreateUser = order.CreateUser;
+      orderDetails.SubTotal = order.SubTotal;
+      orderDetails.VatTotal = order.VatTotal;
+      orderDetails.Total = order.OrderTotal;
+
+      foreach(var lineDetail in order.OrderDetails)
+      {
+        var newLineDetail = new OrderLineDetailModel
+        {
+          Discount = lineDetail.Discount,
+          ItemDescription = lineDetail.ItemDescription,
+          Quantity = lineDetail.Quantity,
+          UnitPrice = lineDetail.UnitPrice,
+          LineTotal = lineDetail.LineTotal
+        };
+
+        orderDetails.OrderLineDetails.Add(newLineDetail);
+      }
+
+      return new OrderQuotationViewModel
+      {
+        CompanyProfile = companyProfile,
+        CustomerDetail = customerDetails,
+        DeliveryAddress = addressDetails,
+        OrderTotals = orderDetails
+      };
+    }
   }
 }

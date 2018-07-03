@@ -25,6 +25,7 @@ namespace ColourCoded.Orders.API.Data
       modelBuilder.ApplyConfiguration(new ContactPersonMapping());
       modelBuilder.ApplyConfiguration(new AddressDetailMapping());
       modelBuilder.ApplyConfiguration(new CompanyAddressDetailMapping());
+      modelBuilder.ApplyConfiguration(new CompanyBankingDetailMapping());
     }
   }
 }

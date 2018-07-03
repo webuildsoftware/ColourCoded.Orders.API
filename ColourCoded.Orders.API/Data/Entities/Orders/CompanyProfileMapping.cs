@@ -10,6 +10,9 @@ namespace ColourCoded.Orders.API.Data.Entities.Orders
       builder.ToTable("CompanyProfiles");
 
       builder.HasKey("CompanyProfileId");
+
+      builder.HasMany(cp => cp.Addresses);
+      builder.HasMany(cp => cp.BankingDetails);
     }
   }
 }

@@ -15,6 +15,7 @@ namespace ColourCoded.Orders.API.Data.Entities.Orders
     public string FaxNo { get; set; }
     public int OrderNoSeed { get; set; }
     public List<CompanyAddressDetail> Addresses { get; set; }
+    public List<CompanyBankingDetail> BankingDetails { get; set; }
     public string CreateUser { get; set; }
     public DateTime CreateDate { get; set; }
     public string UpdateUser { get; set; }
@@ -23,6 +24,7 @@ namespace ColourCoded.Orders.API.Data.Entities.Orders
     public CompanyProfile()
     {
       Addresses = new List<CompanyAddressDetail>();
+      BankingDetails = new List<CompanyBankingDetail>();
     }
   }
 }
