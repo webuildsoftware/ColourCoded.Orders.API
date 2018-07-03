@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ColourCoded.Orders.API.Data.Entities.Orders
 {
@@ -13,9 +14,15 @@ namespace ColourCoded.Orders.API.Data.Entities.Orders
     public string TelephoneNo { get; set; }
     public string FaxNo { get; set; }
     public int OrderNoSeed { get; set; }
+    public List<CompanyAddressDetail> Addresses { get; set; }
     public string CreateUser { get; set; }
     public DateTime CreateDate { get; set; }
     public string UpdateUser { get; set; }
     public DateTime? UpdateDate { get; set; }
+
+    public CompanyProfile()
+    {
+      Addresses = new List<CompanyAddressDetail>();
+    }
   }
 }

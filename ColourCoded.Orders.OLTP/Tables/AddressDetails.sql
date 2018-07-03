@@ -1,9 +1,9 @@
 ﻿CREATE TABLE [dbo].[AddressDetails]
 (
   [AddressDetailId] INT IDENTITY(1, 1) PRIMARY KEY,
+  [AddressType] VARCHAR(255) NOT NULL,
   [AddressLine1] VARCHAR(255) NOT NULL,
   [AddressLine2] VARCHAR(255) NOT NULL,
-  [AddressType] VARCHAR(255) NOT NULL,
   [City] VARCHAR(255) NOT NULL,
   [Country] VARCHAR(255) NOT NULL,
   [PostalCode] VARCHAR(255) NOT NULL,
