@@ -65,5 +65,9 @@
     <Build Include="Tables\OrderDetails.sql" />
     <Build Include="Tables\TaxRate.sql" />
     <Build Include="Tables\CompanyProfile.sql" />
+    <Build Include="Tables\AddressDetails.sql" />
+    <Build Include="Tables\CompanyAddressDetails.sql" />
+    <Build Include="Tables\CompanyBankingDetails.sql" />
+    <Build Include="Tables\ContactPersons.sql" />
   </ItemGroup>
 </Project>

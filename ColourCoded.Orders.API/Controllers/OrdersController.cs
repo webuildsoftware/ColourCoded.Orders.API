@@ -15,10 +15,12 @@ namespace ColourCoded.Orders.API.Controllers
   public class OrdersController : Controller
   {
     protected OrdersContext Context;
+    protected SecurityContext SecurityContext;
 
-    public OrdersController(OrdersContext context)
+    public OrdersController(OrdersContext context, SecurityContext securityContext)
     {
       Context = context;
+      SecurityContext = securityContext;
     }
 
     [HttpPost, Route("vatrate")]
@@ -712,6 +714,8 @@ namespace ColourCoded.Orders.API.Controllers
           customerDetails.ContactNo = existingContact.ContactNo;
           customerDetails.ContactEmailAddress = existingContact.EmailAddress;
         }
+        else
+          customerDetails.ContactName = existingCustomer.CustomerName;
 
         if(existingAddresss != null)
         {
@@ -727,10 +731,15 @@ namespace ColourCoded.Orders.API.Controllers
       orderDetails.OrderNo = order.OrderNo;
       orderDetails.OrderId = order.OrderId;
       orderDetails.CreateDate = order.CreateDate;
-      orderDetails.CreateUser = order.CreateUser;
       orderDetails.SubTotal = order.SubTotal;
       orderDetails.VatTotal = order.VatTotal;
       orderDetails.Total = order.OrderTotal;
+
+      var salesPerson = SecurityContext.Users.FirstOrDefault(u => u.Username == order.CreateUser);
+      if (salesPerson != null)
+        orderDetails.CreateUser = (salesPerson.FirstName + " " + salesPerson.LastName).Trim() != string.Empty ? (salesPerson.FirstName + " " + salesPerson.LastName) : order.CreateUser; // replace with first and last name of user
+      else
+        orderDetails.CreateUser = order.CreateUser;
 
       foreach(var lineDetail in order.OrderDetails)
       {

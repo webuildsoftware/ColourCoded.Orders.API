@@ -16,6 +16,14 @@ namespace ColourCoded.Orders.API.Tests
       return new OrdersContext(optionsBuilder.Options);
     }
 
+    public static SecurityContext CreateSecurityContext(IConfiguration configuration)
+    {
+      var optionsBuilder = new DbContextOptionsBuilder<SecurityContext>();
+      optionsBuilder.UseSqlServer(configuration.GetConnectionString("ColourCoded_Security_OLTP"));
+
+      return new SecurityContext(optionsBuilder.Options);
+    }
+
     public static OrderHead CreateOrderHead(OrdersContext context, string orderNo = "TEST13993", string salesPerson = "testuser", decimal salesTotal = 1110.0M, decimal salesVat = 110.0M, int salesDateAddMonths = 0, int companyProfileId = 0, int customerId = 0, int contactId = 0, int addressDetailId = 0)
     {
       var order = new OrderHead

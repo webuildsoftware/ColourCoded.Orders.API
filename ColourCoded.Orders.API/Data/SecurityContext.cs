@@ -6,6 +6,7 @@ namespace ColourCoded.Orders.API.Data
   public class SecurityContext : DbContext
   {
     public DbSet<Session> Sessions { get; set; }
+    public DbSet<User> Users { get; set; }
 
     public SecurityContext(DbContextOptions<SecurityContext> options) : base(options)
     {
@@ -15,6 +16,7 @@ namespace ColourCoded.Orders.API.Data
     {
       base.OnModelCreating(modelBuilder);
       modelBuilder.ApplyConfiguration(new SessionMapping());
+      modelBuilder.ApplyConfiguration(new UserMapping());
     }
   }
 }

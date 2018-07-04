@@ -43,8 +43,7 @@ namespace ColourCoded.Orders.API.Shared
           MemoryCache.Set(session.Token, session.Username,
           new MemoryCacheEntryOptions
           {
-            AbsoluteExpiration = new DateTimeOffset(DateTime.Now.AddMinutes(Convert.ToInt32(Configuration["Session.Expiration"]))),
-            SlidingExpiration = new TimeSpan(0, Convert.ToInt32(Configuration["Session.Timeout"]), 0)
+            AbsoluteExpiration = new DateTimeOffset(DateTime.Now.AddMinutes(Convert.ToInt32(Configuration["Session.Expiration"])))
           });
 
           return;

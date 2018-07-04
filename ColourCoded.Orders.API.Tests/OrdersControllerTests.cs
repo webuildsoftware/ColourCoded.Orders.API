@@ -34,7 +34,7 @@ namespace ColourCoded.Orders.API.Tests
 
         MemoryCache = new MemoryCache(new MemoryCacheOptions());
         Context = TestHelper.CreateDbContext(Configuration);
-        Controller = new OrdersController(Context);
+        Controller = new OrdersController(Context, TestHelper.CreateSecurityContext(Configuration));
       }
 
     }
