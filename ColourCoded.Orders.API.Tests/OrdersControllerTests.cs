@@ -64,11 +64,11 @@ namespace ColourCoded.Orders.API.Tests
 
         Assert.AreEqual(orderOne.OrderNo, result[0].OrderNo);
         Assert.AreEqual(orderOne.OrderId, result[0].OrderId);
-        Assert.AreEqual(orderOne.OrderTotal.ToString("R 0 000.00"), result[0].Total);
+        Assert.AreEqual(orderOne.OrderTotal.ToString("####.00"), result[0].Total);
 
         Assert.AreEqual(orderTwo.OrderNo, result[1].OrderNo);
         Assert.AreEqual(orderTwo.OrderId, result[1].OrderId);
-        Assert.AreEqual(orderTwo.OrderTotal.ToString("R 0 000.00"), result[1].Total);
+        Assert.AreEqual(orderTwo.OrderTotal.ToString("####.00"), result[1].Total);
       }
     }
 
@@ -99,11 +99,11 @@ namespace ColourCoded.Orders.API.Tests
 
         Assert.AreEqual(orderOne.OrderNo, result[0].OrderNo);
         Assert.AreEqual(orderOne.OrderId, result[0].OrderId);
-        Assert.AreEqual(orderOne.OrderTotal.ToString("R 0 000.00"), result[0].Total);
+        Assert.AreEqual(orderOne.OrderTotal.ToString("####.00"), result[0].Total);
 
         Assert.AreEqual(orderTwo.OrderNo, result[1].OrderNo);
         Assert.AreEqual(orderTwo.OrderId, result[1].OrderId);
-        Assert.AreEqual(orderTwo.OrderTotal.ToString("R 0 000.00"), result[1].Total);
+        Assert.AreEqual(orderTwo.OrderTotal.ToString("####.00"), result[1].Total);
       }
     }
 
@@ -134,11 +134,11 @@ namespace ColourCoded.Orders.API.Tests
 
         Assert.AreEqual(orderOne.OrderNo, result[0].OrderNo);
         Assert.AreEqual(orderOne.OrderId, result[0].OrderId);
-        Assert.AreEqual(orderOne.OrderTotal.ToString("R 0 000.00"), result[0].Total);
+        Assert.AreEqual(orderOne.OrderTotal.ToString("####.00"), result[0].Total);
 
         Assert.AreEqual(orderTwo.OrderNo, result[1].OrderNo);
         Assert.AreEqual(orderTwo.OrderId, result[1].OrderId);
-        Assert.AreEqual(orderTwo.OrderTotal.ToString("R 0 000.00"), result[1].Total);
+        Assert.AreEqual(orderTwo.OrderTotal.ToString("####.00"), result[1].Total);
       }
     }
 
@@ -154,9 +154,9 @@ namespace ColourCoded.Orders.API.Tests
 
         TestHelper.RemoveOrderHeads(resources.Context);
         var company = TestHelper.CreateCompany(resources.Context);
-        var orderOne = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST001", salesPerson: username, salesDateAddMonths: -1);
-        var orderTwo = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST002", salesPerson: username, salesDateAddMonths: -15);
-        var orderThree = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST003", salesPerson: "differentUser", salesDateAddMonths: -18, companyProfileId: company.CompanyProfileId);
+        var orderOne = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST001", salesPerson: username, salesDateAddMonths: -15);
+        var orderTwo = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST002", salesPerson: username, salesDateAddMonths: -18);
+        var orderThree = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST003", salesPerson: "differentUser", salesDateAddMonths: -1, companyProfileId: company.CompanyProfileId);
         var orderFour = TestHelper.CreateOrderHead(resources.Context, orderNo: "TEST004", salesPerson: username, salesDateAddMonths: -30, companyProfileId: company.CompanyProfileId);
 
         var requestModel = new GetHomeOrdersPeriodRequestModel { Username = username, CompanyProfileId = company.CompanyProfileId, StartDate = DateTime.Now.AddDays(-20), EndDate = DateTime.Now };
@@ -168,17 +168,17 @@ namespace ColourCoded.Orders.API.Tests
         Assert.IsNotNull(result);
         Assert.AreEqual(3, result.Count);
 
-        Assert.AreEqual(orderOne.OrderNo, result[0].OrderNo);
-        Assert.AreEqual(orderOne.OrderId, result[0].OrderId);
-        Assert.AreEqual(orderOne.OrderTotal.ToString("R 0 000.00"), result[0].Total);
+        Assert.AreEqual(orderThree.OrderNo, result[0].OrderNo);
+        Assert.AreEqual(orderThree.OrderId, result[0].OrderId);
+        Assert.AreEqual(orderThree.OrderTotal.ToString("####.00"), result[0].Total);
 
-        Assert.AreEqual(orderTwo.OrderNo, result[1].OrderNo);
-        Assert.AreEqual(orderTwo.OrderId, result[1].OrderId);
-        Assert.AreEqual(orderTwo.OrderTotal.ToString("R 0 000.00"), result[1].Total);
+        Assert.AreEqual(orderOne.OrderNo, result[1].OrderNo);
+        Assert.AreEqual(orderOne.OrderId, result[1].OrderId);
+        Assert.AreEqual(orderOne.OrderTotal.ToString("####.00"), result[1].Total);
 
-        Assert.AreEqual(orderThree.OrderNo, result[2].OrderNo);
-        Assert.AreEqual(orderThree.OrderId, result[2].OrderId);
-        Assert.AreEqual(orderThree.OrderTotal.ToString("R 0 000.00"), result[2].Total);
+        Assert.AreEqual(orderTwo.OrderNo, result[2].OrderNo);
+        Assert.AreEqual(orderTwo.OrderId, result[2].OrderId);
+        Assert.AreEqual(orderTwo.OrderTotal.ToString("####.00"), result[2].Total);
       }
     }
 

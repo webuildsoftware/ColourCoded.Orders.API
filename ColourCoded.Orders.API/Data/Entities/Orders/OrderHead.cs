@@ -13,7 +13,6 @@ namespace ColourCoded.Orders.API.Data.Entities.Orders
     public decimal OrderTotal { get; set; }
     public decimal VatRate { get; set; }
     public int CompanyProfileId { get; set; }
-    public int CustomerId { get; set; }
     public int ContactId { get; set; }
     public int AddressDetailId { get; set; }
     public string Status { get; set; }
@@ -21,11 +20,11 @@ namespace ColourCoded.Orders.API.Data.Entities.Orders
     public string CreateUser { get; set; }
     public DateTime? UpdateDate { get; set; }
     public string UpdateUser { get; set; }
+    public int CustomerId { get; set; }
     public List<OrderDetail> OrderDetails { get; set; }
 
     public OrderHead()
     {
-      Status = "Held";
       OrderDetails = new List<OrderDetail>();
     }
   }

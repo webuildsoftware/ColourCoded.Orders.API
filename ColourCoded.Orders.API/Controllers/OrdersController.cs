@@ -8,6 +8,7 @@ using System;
 using ColourCoded.Orders.API.Data.Entities.Orders;
 using ColourCoded.Orders.API.Shared;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace ColourCoded.Orders.API.Controllers
 {
@@ -45,34 +46,56 @@ namespace ColourCoded.Orders.API.Controllers
     {
       var orders = new List<HomeOrdersModel>();
 
-      var userOrders = Context.Orders.Where(o => o.CreateUser == requestModel.Username).OrderByDescending(o => o.CreateDate)
-        .Take(50).Select(o => new HomeOrdersModel
-        {
-          OrderId = o.OrderId,
-          OrderNo = o.OrderNo,
-          CreateDate = o.CreateDate.ToShortDateString(),
-          Total = o.OrderTotal.ToString("R # ###.#0"),
-          Status = o.Status
-        }).ToList();
+      var userOrders = from order in Context.Orders
+                       join contacts in Context.Contacts on order.ContactId equals contacts.ContactId into ljContacts
+                       from contact in ljContacts.DefaultIfEmpty()
+                       join customers in Context.Customers on order.CustomerId equals customers.CustomerId into ljCustomers
+                       from customer in ljCustomers.DefaultIfEmpty()
+                       where order.CreateUser == requestModel.Username
+                       orderby order.CreateDate descending
+                       select new HomeOrdersModel
+                       {
+                         OrderId = order.OrderId,
+                         OrderNo = order.OrderNo,
+                         CreateDate = order.CreateDate.ToString("dd-MM-yyy"),
+                         Total = order.OrderTotal.ToString(),
+                         Status = order.Status,
+                         CustomerId = order.CustomerId.ToString(),
+                         CustomerName = customer.CustomerName,
+                         ContactId = order.ContactId.ToString(),
+                         ContactName = contact.ContactName,
+                         EmailAddress = order.ContactId != 0 ? contact.EmailAddress : customer.EmailAddress,
+                       };
 
-      if (userOrders != null) orders.AddRange(userOrders);
+      orders.AddRange(userOrders.Take(50).ToList());
 
       if (requestModel.CompanyProfileId != 0)
       {
-        var companyOrders = Context.Orders.Where(o => o.CreateUser != requestModel.Username && o.CompanyProfileId == requestModel.CompanyProfileId).OrderByDescending(o => o.CreateDate)
-          .Take(50).Select(o => new HomeOrdersModel
-          {
-            OrderId = o.OrderId,
-            OrderNo = o.OrderNo,
-            CreateDate = o.CreateDate.ToShortDateString(),
-            Total = o.OrderTotal.ToString("R # ###.#0"),
-            Status = o.Status
-          }).ToList();
+        var companyOrders = from order in Context.Orders
+                            join contacts in Context.Contacts on order.ContactId equals contacts.ContactId into ljContacts
+                            from contact in ljContacts.DefaultIfEmpty()
+                            join customers in Context.Customers on order.CustomerId equals customers.CustomerId into ljCustomers
+                            from customer in ljCustomers.DefaultIfEmpty()
+                            where order.CompanyProfileId == requestModel.CompanyProfileId && order.CreateUser != requestModel.Username
+                            orderby order.CreateDate descending
+                            select new HomeOrdersModel
+                            {
+                              OrderId = order.OrderId,
+                              OrderNo = order.OrderNo,
+                              CreateDate = order.CreateDate.ToString("dd-MM-yyy"),
+                              Total = order.OrderTotal.ToString(),
+                              Status = order.Status,
+                              CustomerId = order.CustomerId.ToString(),
+                              CustomerName = customer.CustomerName,
+                              ContactId = order.ContactId.ToString(),
+                              ContactName = contact.ContactName,
+                              EmailAddress = order.ContactId != 0 ? contact.EmailAddress : customer.EmailAddress,
+                            };
 
-        if (companyOrders != null) orders.AddRange(companyOrders);
+        orders.AddRange(companyOrders.Take(50).ToList());
       }
 
-      return orders;
+      return orders.OrderByDescending(o => DateTime.ParseExact(o.CreateDate, "dd-MM-yyyy", CultureInfo.InvariantCulture)).Distinct().ToList();
     }
 
     [HttpPost, Route("homeperiod")]
@@ -80,34 +103,56 @@ namespace ColourCoded.Orders.API.Controllers
     {
       var orders = new List<HomeOrdersModel>();
 
-      var userOrders = Context.Orders.Where(o => o.CreateUser == requestModel.Username && o.CreateDate.Date >= requestModel.StartDate && o.CreateDate.Date <= requestModel.EndDate)
-        .Select(o => new HomeOrdersModel
-        {
-          OrderId = o.OrderId,
-          OrderNo = o.OrderNo,
-          CreateDate = o.CreateDate.ToShortDateString(),
-          Total = o.OrderTotal.ToString("R # ###.#0"),
-          Status = o.Status
-        }).ToList();
+      var userOrders = from order in Context.Orders
+                       join contacts in Context.Contacts on order.ContactId equals contacts.ContactId into ljContacts
+                       from contact in ljContacts.DefaultIfEmpty()
+                       join customers in Context.Customers on order.CustomerId equals customers.CustomerId into ljCustomers
+                       from customer in ljCustomers.DefaultIfEmpty()
+                       where order.CreateUser == requestModel.Username && order.CreateDate.Date >= requestModel.StartDate && order.CreateDate.Date <= requestModel.EndDate
+                       orderby order.CreateDate descending
+                       select new HomeOrdersModel
+                       {
+                         OrderId = order.OrderId,
+                         OrderNo = order.OrderNo,
+                         CreateDate = order.CreateDate.ToString("dd-MM-yyy"),
+                         Total = order.OrderTotal.ToString(),
+                         Status = order.Status,
+                         CustomerId = order.CustomerId.ToString(),
+                         CustomerName = customer.CustomerName,
+                         ContactId = order.ContactId.ToString(),
+                         ContactName = contact.ContactName,
+                         EmailAddress = order.ContactId != 0 ? contact.EmailAddress : customer.EmailAddress,
+                       };
 
-      if (userOrders != null) orders.AddRange(userOrders);
+      orders.AddRange(userOrders.Take(50).ToList());
 
       if (requestModel.CompanyProfileId != 0)
       {
-        var companyOrders = Context.Orders.Where(o => o.CreateUser != requestModel.Username && o.CompanyProfileId == requestModel.CompanyProfileId && o.CreateDate.Date >= requestModel.StartDate && o.CreateDate.Date <= requestModel.EndDate).OrderByDescending(o => o.CreateDate)
-          .Take(50).Select(o => new HomeOrdersModel
-          {
-            OrderId = o.OrderId,
-            OrderNo = o.OrderNo,
-            CreateDate = o.CreateDate.ToShortDateString(),
-            Total = o.OrderTotal.ToString("R # ###.#0"),
-            Status = o.Status
-          }).ToList();
+        var companyOrders = from order in Context.Orders
+                            join contacts in Context.Contacts on order.ContactId equals contacts.ContactId into ljContacts
+                            from contact in ljContacts.DefaultIfEmpty()
+                            join customers in Context.Customers on order.CustomerId equals customers.CustomerId into ljCustomers
+                            from customer in ljCustomers.DefaultIfEmpty()
+                            where order.CompanyProfileId == requestModel.CompanyProfileId && order.CreateDate.Date >= requestModel.StartDate && order.CreateDate.Date <= requestModel.EndDate && order.CreateUser != requestModel.Username
+                            orderby order.CreateDate descending
+                            select new HomeOrdersModel
+                            {
+                              OrderId = order.OrderId,
+                              OrderNo = order.OrderNo,
+                              CreateDate = order.CreateDate.ToString("dd-MM-yyy"),
+                              Total = order.OrderTotal.ToString(),
+                              Status = order.Status,
+                              CustomerId = order.CustomerId.ToString(),
+                              CustomerName = customer.CustomerName,
+                              ContactId = order.ContactId.ToString(),
+                              ContactName = contact.ContactName,
+                              EmailAddress = order.ContactId != 0 ? contact.EmailAddress : customer.EmailAddress,
+                            };
 
-        if (companyOrders != null) orders.AddRange(companyOrders);
+        orders.AddRange(companyOrders.Take(50).ToList());
       }
 
-      return orders;
+      return orders.OrderByDescending(o => DateTime.ParseExact(o.CreateDate, "dd-MM-yyyy", CultureInfo.InvariantCulture)).Distinct().ToList();
     }
 
     [HttpPost, Route("add")]
@@ -128,6 +173,7 @@ namespace ColourCoded.Orders.API.Controllers
         OrderTotal = 0M,
         VatRate = vatTax.Rate,
         CompanyProfileId = requestModel.CompanyProfileId,
+        Status = OrdersConstants.InProgressStatus,
         CreateDate = DateTime.Now,
         CreateUser = requestModel.Username
       };
@@ -741,15 +787,17 @@ namespace ColourCoded.Orders.API.Controllers
       else
         orderDetails.CreateUser = order.CreateUser;
 
-      foreach(var lineDetail in order.OrderDetails)
+      var maxLineNo = order.OrderDetails.Max(o => o.LineNo);
+
+      foreach (var linedetail in order.OrderDetails.Where(o => o.LineNo == maxLineNo))
       {
         var newLineDetail = new OrderLineDetailModel
         {
-          Discount = lineDetail.Discount,
-          ItemDescription = lineDetail.ItemDescription,
-          Quantity = lineDetail.Quantity,
-          UnitPrice = lineDetail.UnitPrice,
-          LineTotal = lineDetail.LineTotal
+          Discount = linedetail.Discount,
+          ItemDescription = linedetail.ItemDescription,
+          Quantity = linedetail.Quantity,
+          UnitPrice = linedetail.UnitPrice,
+          LineTotal = linedetail.LineTotal
         };
 
         orderDetails.OrderLineDetails.Add(newLineDetail);

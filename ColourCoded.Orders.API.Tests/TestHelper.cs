@@ -24,7 +24,7 @@ namespace ColourCoded.Orders.API.Tests
       return new SecurityContext(optionsBuilder.Options);
     }
 
-    public static OrderHead CreateOrderHead(OrdersContext context, string orderNo = "TEST13993", string salesPerson = "testuser", decimal salesTotal = 1110.0M, decimal salesVat = 110.0M, int salesDateAddMonths = 0, int companyProfileId = 0, int customerId = 0, int contactId = 0, int addressDetailId = 0)
+    public static OrderHead CreateOrderHead(OrdersContext context, string orderNo = "TEST13993", string salesPerson = "testuser", decimal salesTotal = 1110.0M, decimal salesVat = 110.0M, int salesDateAddMonths = 0, int companyProfileId = 0, int customerId = 0, int contactId = 0, int addressDetailId = 0, string status = "PROGRESS")
     {
       var order = new OrderHead
       {
@@ -38,7 +38,8 @@ namespace ColourCoded.Orders.API.Tests
         CompanyProfileId = companyProfileId,
         CustomerId = customerId,
         ContactId = contactId,
-        AddressDetailId = addressDetailId
+        AddressDetailId = addressDetailId,
+        Status = status
       };
 
       context.Orders.Add(order);

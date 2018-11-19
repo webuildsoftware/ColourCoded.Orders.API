@@ -4,7 +4,7 @@
   {
     public const string VatTaxCode = "VAT";
     public const string AcceptStatus = "ACCEPTED";
-    public const string HeldStatus = "HELD";
+    public const string InProgressStatus = "PROGRESS";
 
   }
 }
