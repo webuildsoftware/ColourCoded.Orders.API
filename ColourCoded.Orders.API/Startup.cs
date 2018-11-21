@@ -36,6 +36,9 @@ namespace ColourCoded.Orders.API
 
       services.AddDbContext<OrdersContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ColourCoded_Orders_OLTP")));
       services.AddDbContext<SecurityContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ColourCoded_Security_OLTP")));
+
+      services.AddTransient<ISecurityHelper, SecurityHelper>();
+      services.AddTransient<ICommunicationsHelper, CommunicationsHelper>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

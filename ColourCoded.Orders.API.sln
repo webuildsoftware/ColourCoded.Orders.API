@@ -3,11 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColourCoded.Orders.API", "ColourCoded.Orders.API\ColourCoded.Orders.API.csproj", "{2A7BB953-8AD9-49CC-A949-EC9C0C20BBFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ColourCoded.Orders.API", "ColourCoded.Orders.API\ColourCoded.Orders.API.csproj", "{2A7BB953-8AD9-49CC-A949-EC9C0C20BBFA}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "ColourCoded.Orders.OLTP", "ColourCoded.Orders.OLTP\ColourCoded.Orders.OLTP.sqlproj", "{215A9820-890A-4999-BB90-E8B7652957E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColourCoded.Orders.API.Tests", "ColourCoded.Orders.API.Tests\ColourCoded.Orders.API.Tests.csproj", "{EE847D1D-48EB-440D-AED3-C0E4A2A69B29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ColourCoded.Orders.API.Tests", "ColourCoded.Orders.API.Tests\ColourCoded.Orders.API.Tests.csproj", "{EE847D1D-48EB-440D-AED3-C0E4A2A69B29}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ColourCoded.Security.API.Tests", "ColourCoded.Security.API.Tests\ColourCoded.Security.API.Tests.csproj", "{7F64309D-A36E-44C8-977B-2BFBA9D134A7}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "ColourCoded.Security.OLTP", "ColourCoded.Security.OLTP\ColourCoded.Security.OLTP.sqlproj", "{78A5BCE9-23FF-419B-87F3-DBC74140D2EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +33,16 @@ Global
 		{EE847D1D-48EB-440D-AED3-C0E4A2A69B29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE847D1D-48EB-440D-AED3-C0E4A2A69B29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE847D1D-48EB-440D-AED3-C0E4A2A69B29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F64309D-A36E-44C8-977B-2BFBA9D134A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F64309D-A36E-44C8-977B-2BFBA9D134A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F64309D-A36E-44C8-977B-2BFBA9D134A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F64309D-A36E-44C8-977B-2BFBA9D134A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78A5BCE9-23FF-419B-87F3-DBC74140D2EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78A5BCE9-23FF-419B-87F3-DBC74140D2EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78A5BCE9-23FF-419B-87F3-DBC74140D2EB}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{78A5BCE9-23FF-419B-87F3-DBC74140D2EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78A5BCE9-23FF-419B-87F3-DBC74140D2EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78A5BCE9-23FF-419B-87F3-DBC74140D2EB}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
