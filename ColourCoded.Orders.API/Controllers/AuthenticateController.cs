@@ -119,6 +119,67 @@ namespace ColourCoded.Orders.API.Controllers
       return new UserModel { Username = user.Username, ApiSessionToken = session.Token, IsAuthenticated = true, CompanyProfileId = user.CompanyProfileId };
     }
 
+    [HttpPost, Route("profile/get")]
+    public UpdateProfileModel GetProfile([FromBody]FindUserRequestModel requestModel)
+    {
+      var user = Context.Users.FirstOrDefault(r => r.Username.ToUpper() == requestModel.Username.ToUpper());
+
+      if (user == null)
+        return null;
+
+      return new UpdateProfileModel
+      {
+        Username = user.Username,
+        FirstName = user.FirstName,
+        LastName = user.LastName,
+        EmailAddress = user.EmailAddress
+      }; 
+    }
+
+    [HttpPost, Route("profile/update")]
+    public ValidationResult UpdateProfile([FromBody]UpdateProfileRequestModel requestModel)
+    {
+      var result = new ValidationResult();
+      var user = Context.Users.FirstOrDefault(r => r.Username.ToUpper() == requestModel.Username.ToUpper());
+
+      if (user == null)
+      {
+        result.InValidate("", "Username does not exist.");
+        return result;
+      }
+
+      if(string.IsNullOrEmpty(requestModel.FirstName))
+        result.InValidate("firstName", "First name required.");
+
+      if (string.IsNullOrEmpty(requestModel.LastName))
+        result.InValidate("lastName", "Last name required.");
+
+      if (string.IsNullOrEmpty(requestModel.EmailAddress))
+        result.InValidate("emailAddress", "Email address required.");
+
+      if (!string.IsNullOrEmpty(requestModel.NewPassword) && requestModel.NewPassword.ToUpper() != requestModel.ConfirmPassword.ToUpper() )
+        result.InValidate("password", "New and confirm password do not match.");
+
+      if (result.IsValid)
+      {
+        user.UpdateDate = DateTime.Now;
+        user.UpdateUser = user.Username;
+        user.FirstName = requestModel.FirstName;
+        user.LastName = requestModel.LastName;
+        user.EmailAddress = requestModel.EmailAddress;
+
+        if (!string.IsNullOrEmpty(requestModel.NewPassword))
+        {
+          var salt = Context.Salts.First(s => s.Active == true).Value;
+          user.Password = SecurityHelper.SaltedHashAlgorithm(requestModel.NewPassword, salt);
+        }
+
+        Context.SaveChanges();
+      }
+
+      return result;
+    }
+
     [HttpPost, Route("validateusername")]
     public ValidationResult FindUsername([FromBody]ValidateUserRequestModel requestModel)
     {
@@ -156,24 +217,31 @@ namespace ColourCoded.Orders.API.Controllers
     }
 
     [HttpPost, Route("forgotpassword")]
-    public bool ForgotPassword([FromBody]CredentialsRequestModel requestModel)
+    public ValidationResult ForgotPassword([FromBody]CredentialsRequestModel requestModel)
     {
+      var result = new ValidationResult();
+
       var existingUser = Context.Users.FirstOrDefault(r => r.EmailAddress.ToUpper() == requestModel.EmailAddress.ToUpper());
 
       if (existingUser == null)
-        return false;
-      else
       {
-        var tempPassword = SecurityHelper.CreateRandomPassword(Convert.ToInt32(Configuration["Security.TempPasswordLength"]));
-        var salt = Context.Salts.First(s => s.Active == true).Value;
-
-        existingUser.Password = SecurityHelper.SaltedHashAlgorithm(tempPassword, salt);
-
-        var emailBody = @"Your temporary password is: " + tempPassword + Environment.NewLine +
-                         "Please click on the following link to change your password: " + Configuration["ColourCoded.UI.Sitename"] + "/security/authenticate/changepassword?username=" + existingUser.Username;
-
-        return CommunicationsHelper.SendEmail(existingUser.EmailAddress, "Password reset", emailBody);
+        result.InValidate("", "The email address is not registered.");
+        return result;
       }
+
+      var tempPassword = SecurityHelper.CreateRandomPassword(Convert.ToInt32(Configuration["Security.TempPasswordLength"]));
+      var salt = Context.Salts.First(s => s.Active == true).Value;
+      var emailBody = @"Your temporary password is: " + tempPassword + Environment.NewLine +
+                       "Please click on the following link to login: http://" + Configuration["ColourCoded.UI.Sitename"] + "/security/authenticate";
+
+      existingUser.Password = SecurityHelper.SaltedHashAlgorithm(tempPassword, salt);
+      Context.SaveChanges();
+
+      if(CommunicationsHelper.SendEmail(existingUser.EmailAddress, "Password reset", emailBody))
+        return result;
+
+      result.InValidate("", "Error sending email. Please contact the IT Administrator.");
+      return result;
     }
 
     [HttpPost, Route("changepassword")]

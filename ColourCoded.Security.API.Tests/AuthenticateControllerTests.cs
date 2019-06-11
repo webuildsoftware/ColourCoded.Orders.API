@@ -208,7 +208,7 @@ namespace ColourCoded.Security.API.Tests
         resources.AddMockCreateRandomPassword(Convert.ToInt32(resources.Configuration["Security.TempPasswordLength"]), "testpassword");
 
         var emailBody = @"Your temporary password is: testpassword" + Environment.NewLine +
-                 "Please click on the following link to change your password: " + resources.Configuration["ColourCoded.UI.Sitename"] + "/security/authenticate/changepassword?username=" + user.Username;
+                 "Please click on the following link to login: http://" + resources.Configuration["ColourCoded.UI.Sitename"] + "/security/authenticate";
 
         resources.AddMockSendEmail(user.EmailAddress, "Password reset", emailBody);
 
@@ -217,7 +217,7 @@ namespace ColourCoded.Security.API.Tests
 
         // Then
         Assert.IsNotNull(result);
-        Assert.IsTrue(result);
+        Assert.IsTrue(result.IsValid);
       }
     }
 
@@ -239,7 +239,7 @@ namespace ColourCoded.Security.API.Tests
 
         // Then
         Assert.IsNotNull(result);
-        Assert.IsFalse(result);
+        Assert.IsFalse(result.IsValid);
       }
     }
 

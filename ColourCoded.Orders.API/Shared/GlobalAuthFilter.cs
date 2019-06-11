@@ -50,7 +50,7 @@ namespace ColourCoded.Orders.API.Shared
         }
 
         context.Result = new JsonResult(new Exception("Access Denied!"));
-        context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+        context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
       }
     }
   }
